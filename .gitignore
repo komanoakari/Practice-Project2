@@ -1,0 +1,39 @@
+# Laravel
+src/vendor/
+src/node_modules/
+src/public/hot
+src/public/storage
+src/public/mix-manifest.json
+src/public/build/
+src/bootstrap/cache/*.php
+src/storage/*.key
+!src/storage/app/public/
+
+# Environment files
+src/.env
+src/.env.*
+!src/.env.example
+!src/.env.testing.example
+src/.env.backup
+
+# Docker
+/docker/mysql/data
+docker-compose.override.yml
+
+# Testing
+.phpunit.result.cache
+
+# IDE
+/.idea
+/.vscode
+
+# Logs
+npm-debug.log
+yarn-error.log
+
+# OS
+.DS_Store
+
+# Homestead
+Homestead.json
+Homestead.yaml
