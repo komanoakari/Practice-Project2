@@ -13,6 +13,15 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
 
+use Laravel\Fortify\Contracts\LoginViewResponse;
+use Laravel\Fortify\Contracts\RegisterViewResponse;
+
+use Laravel\Fortify\Contracts\LoginResponse;
+use Laravel\Fortify\Contracts\RegisterResponse;
+use Laravel\Fortify\Contracts\LogoutResponse;
+
+use App\Http\Requests\LoginRequest;
+
 class FortifyServiceProvider extends ServiceProvider
 {
     /**
@@ -28,6 +37,10 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->app->bind(
+            \Laravel\Fortify\Http\Requests\LoginRequest::class,
+            \App\Http\Requests\LoginRequest::class
+        );
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
@@ -42,5 +55,6 @@ class FortifyServiceProvider extends ServiceProvider
         RateLimiter::for('two-factor', function (Request $request) {
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
+
     }
 }

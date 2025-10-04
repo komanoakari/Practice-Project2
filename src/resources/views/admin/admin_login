@@ -1,12 +1,12 @@
-@extends('layouts.header_user')
+@extends('layouts.header_admin')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/login.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin_login.css') }}">
 @endsection
 
 @section('content')
 <div class="login-contents">
-    <h2 class="login-heading">ログイン</h2>
+    <h2 class="login-heading">管理者ログイン</h2>
 
     <div class="login-form">
         <form action="{{ route('login.store') }}" class="login-form-inner" method="post" novalidate>
@@ -26,8 +26,7 @@
                     <p class="login-error-message">{{ $message }}</p>
                 @enderror
             </div>
-            <input type="submit" class="login-form-btn" value="ログインする">
-            <a href="{{ route('register') }}" class="register-link">会員登録はこちら</a>
+            <input type="submit" class="login-form-btn" value="管理者ログインする">
         </form>
     </div>
 </div>
