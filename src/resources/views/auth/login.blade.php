@@ -1,4 +1,4 @@
-@extends('layouts.header_user')
+@extends('layouts.app')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/login.css') }}">
@@ -9,7 +9,7 @@
     <h2 class="login-heading">ログイン</h2>
 
     <div class="login-form">
-        <form action="{{ route('login.store') }}" class="login-form-inner" method="post" novalidate>
+        <form action="{{ route('login') }}" class="login-form-inner" method="post" novalidate>
         @csrf
             <div class="login-form-group">
                 <label for="email" class="login-form-label">メールアドレス</label>
