@@ -24,23 +24,56 @@ use App\Http\Requests\LoginRequest;
 
 class FortifyServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
-        //
+        $this->app->singleton(LoginViewResponse::class, function() {
+            return new class implements LoginViewResponse {
+                public function toResponse($request) {
+                    return response()->view('auth.login');
+                }
+            };
+        });
+
+        $this->app->singleton(RegisterViewResponse::class, function() {
+            return new class implements RegisterViewResponse {
+                public function toResponse($request) {
+                    return response()->view('auth.register');
+                }
+            };
+        });
+
+        $this->app->singleton(LoginResponse::class, function() {
+            return new class implements LoginResponse {
+                public function toResponse($request) {
+                    return redirect('/attendance');
+                }
+            };
+        });
+
+        $this->app->singleton(RegisterResponse::class, function() {
+            return new class implements RegisterResponse {
+                public function toResponse($request) {
+                    return redirect('/attendance');
+                }
+            };
+        });
+
+        $this->app->singleton(LogoutResponse::class, function() {
+            return new class implements LogoutResponse {
+                public function toResponse($request) {
+                    return redirect('/login');
+                }
+            };
+        });
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         $this->app->bind(
             \Laravel\Fortify\Http\Requests\LoginRequest::class,
             \App\Http\Requests\LoginRequest::class
         );
+
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
