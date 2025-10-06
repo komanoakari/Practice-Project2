@@ -147,4 +147,6 @@ return [
     */
 
     'attributes' => [],
+
+    'There credentials do not match our records.' => 'ログイン情報が登録されていません',
 ];
