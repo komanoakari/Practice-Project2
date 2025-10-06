@@ -9,7 +9,7 @@
 </head>
 <body>
     <header class="header">
-        <img src="{{ asset('images/logo.svg') }}" alt="ロゴ画像">
+        <img src="{{ asset('images/logo.png') }}" alt="ロゴ画像">
     </header>
 
     <main>

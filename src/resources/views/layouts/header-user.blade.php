@@ -9,14 +9,14 @@
 </head>
 <body>
     <header class="header">
-        <img src="{{ asset('images/logo.svg') }}" alt="ロゴ画像">
+        <img src="{{ asset('images/logo.png') }}" alt="ロゴ画像">
 
         <nav class="header-nav">
             <a href="/attendance" class="header-nav-item">勤怠</a>
             <a href="/attendance/list" class="header-nav-item">勤怠一覧</a>
             <a href="/stamp_correction_request/list" class="header-nav-item">申請</a>
             <form action="{{ route('logout') }}" method="POST" class="header-nav-item">
-            @csrf
+                @csrf
                 <button class="header-btn" type="submit">ログアウト</button>
             </form>
         </nav>
