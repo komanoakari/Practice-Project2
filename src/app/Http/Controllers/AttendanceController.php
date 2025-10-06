@@ -44,4 +44,76 @@ class AttendanceController extends Controller
         }
         return '出勤中';
     }
+
+    public function clockIn() {
+        $user = Auth::user();
+        $today = Carbon::now();
+
+        Attendance::create([
+            'user_id' => $user->id,
+            'date' => $today->toDateString(),
+            'start_time' => $today->toTimeString(),
+        ]);
+
+        return redirect()->route('attendance.stamp');
+    }
+
+    public function clockOut() {
+        $user = Auth::user();
+        $today = Carbon::now();
+
+        $todayAttendance = Attendance::where('user_id', $user->id)
+            ->where('date', $today->toDateString())
+            ->first();
+
+        if ($todayAttendance) {
+            $todayAttendance->update([
+                'end_time' => $today->toTimeString(),
+            ]);
+        }
+
+        return redirect()->route('attendance.stamp');
+    }
+
+    public function breakIn() {
+        $user = Auth::user();
+        $today = Carbon::now();
+
+        $todayAttendance = Attendance::where('user_id', $user->id)
+            ->where('date', $today->toDateString())
+            ->first();
+
+        if ($todayAttendance) {
+            Rest::create([
+                'attendance_id' => $todayAttendance->id,
+                'start_time' => $today->toTimeString(),
+            ]);
+        }
+
+        return redirect()->route('attendance.stamp');
+    }
+
+    public function breakOut() {
+        $user = Auth::user();
+        $today = Carbon::now();
+
+        $todayAttendance = Attendance::where('user_id', $user->id)
+            ->whereDate('date', $today->toDateString())
+            ->first();
+
+        if ($todayAttendance) {
+            $currentBreak = Rest::where('attendance_id', $todayAttendance->id)
+                ->whereNull('end_time')
+                ->first();
+
+            if($currentBreak) {
+                $currentBreak->update([
+                    'end_time' => $today->toTimeString(),
+                ]);
+            }
+        }
+
+        return redirect()->route('attendance.stamp');
+    }
+
 }
