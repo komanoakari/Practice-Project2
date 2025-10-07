@@ -26,13 +26,13 @@
         </tr>
         @foreach($attendances as $attendance)
         <tr class="index-table-row">
-            <td class="index-data">{{ Carbon::parse($attendance->date)->format('m/d') }}({{ ['日', '月', '火', '水', '木', '金', '土'][Carbon::parse($attendance->date)->dayOfWeek] }})</td>
-            <td class="index-data">{{ $attendance->start_time ? Carbon::parse($attendance->start_time)->format('H:i') : ''}}</td>
-            <td class="index-data">{{ $attendance->end_time ? Carbon::parse($attendance->end_time)->format('H:i') : ''}}</td>
-            <td class="index-data">{{ $attendance->break_time ? gmdate('H:i', $attendance->break_time * 60) : '' }}</td>
-            <td class="index-data">{{ $attendance->total_time ? gmdate('H:i', $attendance->total_time * 60) : '' }}</td>
+            <td class="index-data">{{ \Carbon\Carbon::parse($attendance->date)->format('m/d') }}({{ ['日', '月', '火', '水', '木', '金', '土'][\Carbon\Carbon::parse($attendance->date)->dayOfWeek] }})</td>
+            <td class="index-data">{{ $attendance->start_time ? \Carbon\Carbon::parse($attendance->start_time)->format('H:i') : ''}}</td>
+            <td class="index-data">{{ $attendance->end_time ? \Carbon\Carbon::parse($attendance->end_time)->format('H:i') : ''}}</td>
+            <td class="index-data">{{ $attendance->break_time ?: '' }}</td>
+            <td class="index-data">{{ $attendance->total_time ?: '' }}</td>
             <td class="index-data">
-                <a href="/attendance/detail/{{ $attendance->id }}" class="index-detail-btn">詳細</a>
+                <a href="{{ route('attendance.detail', ['id' => $attendance->id]) }}" class="index-detail-btn">詳細</a>
             </td>
         </tr>
         @endforeach

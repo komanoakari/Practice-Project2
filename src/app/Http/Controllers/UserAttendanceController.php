@@ -10,7 +10,7 @@ use App\Models\Attendance;
 use App\Models\Rest;
 
 
-class UserAttendance extends Controller
+class UserAttendanceController extends Controller
 {
     public function index(Request $request) {
         $user = Auth::user();
@@ -43,15 +43,29 @@ class UserAttendance extends Controller
                     $breakMinutes = $breakMinutes + $end->diffInMinutes($start);
                 }
             }
-            $attendance->break_time = $breakMinutes;
+
+            if ($breakMinutes > 0) {
+                $hours = floor($breakMinutes / 60);
+                $mins = $breakMinutes % 60;
+                $attendance->break_time = sprintf('%02d:%02d', $hours, $mins);
+            } else {
+                $attendance->break_time = '';
+            }
 
             if ($attendance->end_time) {
                 $dayStart = Carbon::parse($attendance->start_time);
                 $dayEnd = Carbon::parse($attendance->end_time);
-                $totalMinutes = $dayEnd->diffInMinutes($dayStart);
-                $attendance->total_time = $totalMinutes - $breakMinutes;
+                $totalMinutes = $dayEnd->diffInMinutes($dayStart) - $breakMinutes;
+
+                if ($totalMinutes > 0) {
+                    $hours = floor($totalMinutes / 60);
+                    $mins = $totalMinutes % 60;
+                    $attendance->total_time = sprintf('%02d:%02d', $hours, $mins);
+                } else {
+                    $attendance->total_time = '';
+                }
             } else {
-                $attendance->total_time = 0;
+                $attendance->total_time = '';
             }
         }
         return view('attendance.index', compact('date', 'attendances'));

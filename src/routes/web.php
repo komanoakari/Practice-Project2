@@ -7,8 +7,6 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\UserAttendanceController;
 
-
-
 Route::middleware(['auth','verified'])->group(function() {
     Route::get('/attendance', [AttendanceController::class, 'stamp'])->name('attendance.stamp');
 
