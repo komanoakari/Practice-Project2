@@ -8,6 +8,13 @@
 <h1 class="index-heading">勤怠一覧</h1>
 
 <div class="index-contents">
+    <div class="calender-container">
+        <a href="{{ route('attendance.index', ['date' => $date->copy()->subMonth()->format('Y-m')]) }}" class="last-month-pagination">先月</a>
+        <img src="{{ asset('images/calender-icon.png') }}" alt="カレンダーアイコン" class="calender-icon">
+        <div class="this-month">{{ $date->format('Y/m') }}</div>
+        <a href="{{ route('attendance.index', ['date' => $date->copy()->addMonth()->format('Y-m')]) }}" class="next-month-pagination">翌月</a>
+    </div>
+
     <table class="index-table">
         <tr class="index-table-row">
             <th class="index-table-label">日付</th>
@@ -19,13 +26,13 @@
         </tr>
         @foreach($attendances as $attendance)
         <tr class="index-table-row">
-            <td class="index-data">{{ $attendance->date }}</td>
-            <td class="index-data">{{ $attendance->start_time }}</td>
-            <td class="index-data">{{ $attendance->end_time }}</td>
-            <td class="index-data">{{ $attendance->break_time }}</td>
-            <td class="index-data">{{ $attendance->total_time }}</td>
+            <td class="index-data">{{ Carbon::parse($attendance->date)->format('m/d') }}({{ ['日', '月', '火', '水', '木', '金', '土'][Carbon::parse($attendance->date)->dayOfWeek] }})</td>
+            <td class="index-data">{{ $attendance->start_time ? Carbon::parse($attendance->start_time)->format('H:i') : ''}}</td>
+            <td class="index-data">{{ $attendance->end_time ? Carbon::parse($attendance->end_time)->format('H:i') : ''}}</td>
+            <td class="index-data">{{ $attendance->break_time ? gmdate('H:i', $attendance->break_time * 60) : '' }}</td>
+            <td class="index-data">{{ $attendance->total_time ? gmdate('H:i', $attendance->total_time * 60) : '' }}</td>
             <td class="index-data">
-                <a href="#{{ $attendance->id }}" class="index-detail-btn">詳細</a>
+                <a href="/attendance/detail/{{ $attendance->id }}" class="index-detail-btn">詳細</a>
             </td>
         </tr>
         @endforeach

@@ -45,10 +45,14 @@ class UserAttendance extends Controller
             }
             $attendance->break_time = $breakMinutes;
 
-            $dayStart = Carbon::parse($attendance->start_time);
-            $dayEnd = Carbon::parse($attendance->end_time);
-
-            $attendance->total_time = $$breakMinutes - $dayEnd->diffInMinutes($dayStart);
+            if ($attendance->end_time) {
+                $dayStart = Carbon::parse($attendance->start_time);
+                $dayEnd = Carbon::parse($attendance->end_time);
+                $totalMinutes = $dayEnd->diffInMinutes($dayStart);
+                $attendance->total_time = $totalMinutes - $breakMinutes;
+            } else {
+                $attendance->total_time = 0;
+            }
         }
         return view('attendance.index', compact('date', 'attendances'));
     }
