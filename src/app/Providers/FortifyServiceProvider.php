@@ -15,6 +15,7 @@ use Laravel\Fortify\Fortify;
 
 use Laravel\Fortify\Contracts\LoginViewResponse;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
+use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
 
 use Laravel\Fortify\Contracts\LoginResponse;
 use Laravel\Fortify\Contracts\RegisterResponse;
@@ -38,6 +39,14 @@ class FortifyServiceProvider extends ServiceProvider
             return new class implements RegisterViewResponse {
                 public function toResponse($request) {
                     return response()->view('auth.register');
+                }
+            };
+        });
+
+        $this->app->singleton(VerifyEmailViewResponse::class, function() {
+            return new class implements VerifyEmailViewResponse {
+                public function toResponse($request) {
+                    return response()->view('auth.verify-email');
                 }
             };
         });
@@ -72,6 +81,11 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->bind(
             \Laravel\Fortify\Http\Requests\LoginRequest::class,
             \App\Http\Requests\LoginRequest::class
+        );
+
+        $this->app->bind(
+            \Laravel\Fortify\Http\Requests\RegisterRequest::class,
+            \App\Http\Requests\RegisterRequest::class
         );
 
         Fortify::createUsersUsing(CreateNewUser::class);
