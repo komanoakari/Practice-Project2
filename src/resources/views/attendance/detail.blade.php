@@ -21,6 +21,7 @@
                     <td class="data">{{ $attendance->user->name }}</td>
                     <td></td>
                     <td></td>
+                    <td></td>
                 </tr>
 
                 <tr class="table-row">
@@ -28,6 +29,7 @@
                     <td class="data">{{ \Carbon\Carbon::parse($attendance->date)->format('Y年') }}</td>
                     <td></td>
                     <td class="data">{{ \Carbon\Carbon::parse($attendance->date)->format('m月d日') }}</td>
+                    <td></td>
                 </tr>
 
                 <tr class="table-row">
@@ -36,18 +38,21 @@
                         <td class="data">{{ \Carbon\Carbon::parse($attendance->start_time)->format('H:i') }}</td>
                         <td class="data-separator">〜</td>
                         <td class="data">{{ \Carbon\Carbon::parse($attendance->end_time)->format('H:i') }}</td>
+                        <td></td>
                         <input type="hidden" name="start_time" value="{{ $attendance->start_time }}">
                         <input type="hidden" name="end_time" value="{{ $attendance->end_time }}">
                     @else
                         <td class="data">
                             <input type="time" name="start_time" value="{{ \Carbon\Carbon::parse($attendance->start_time)->format('H:i') }}">
-                            @error('start_time')
-                            <p class="error-text">{{ $message }}</p>
-                            @enderror
                         </td>
                         <td class="data-separator">〜</td>
                         <td class="data">
                             <input type="time" name="end_time" value="{{ \Carbon\Carbon::parse($attendance->end_time)->format('H:i') }}">
+                        </td>
+                        <td>
+                            @error('start_time')
+                            <p class="error-text">{{ $message }}</p>
+                            @enderror
                             @error('end_time')
                             <p class="error-text">{{ $message }}</p>
                             @enderror
@@ -62,24 +67,27 @@
                         <td class="data">{{ \Carbon\Carbon::parse($rest->start_time)->format('H:i') }}</td>
                         <td class="data-separator">〜</td>
                         <td class="data">{{ \Carbon\Carbon::parse($rest->end_time)->format('H:i') }}</td>
+                        <td></td>
                         <input type="hidden" name="break_starts[]" value="{{ $rest->start_time }}">
                         <input type="hidden" name="break_ends[]" value="{{ $rest->end_time }}">
                     @else
                         <td class="data">
                             <input type="time" name="break_starts[]" value="{{ \Carbon\Carbon::parse($rest->start_time)->format('H:i') }}">
-                            @error('break_error')
-                            <p class="error-text">{{ $message }}</p>
-                            @enderror
                         </td>
                         <td class="data-separator">〜</td>
                         <td class="data">
                             <input type="time" name="break_ends[]" value="{{ \Carbon\Carbon::parse($rest->end_time)->format('H:i') }}">
                         </td>
+                        <td>
+                            @error('break_error')
+                            <p class="error-text">{{ $message }}</p>
+                            @enderror
+                        </td>
                     @endif
                 </tr>
                 @endforeach
 
-                @if($attendance->status !== '承認待ち')
+                @if($attendance->status === '承認待ち')
                 <tr class="table-row">
                     <th class="label">休憩{{ $rests->count() + 1 }}</th>
                     <td class="data">
@@ -89,6 +97,7 @@
                     <td class="data">
                         <input type="time" name="break_ends[]">
                     </td>
+                    <td></td>
                 </tr>
                 @endif
 
@@ -97,9 +106,16 @@
                     @if($attendance->status === '承認待ち')
                         <td class="data" colspan="3">{{ $attendance->remarks }}</td>
                         <input type="hidden" name="remarks" value="{{ $attendance->remarks }}">
+                        <td>
+                            @error('remarks')
+                            <p class="error-text">{{ $message }}</p>
+                            @enderror
+                        </td>
                     @else
                         <td class="data" colspan="3">
-                            <textarea name="remarks" id="remark-textarea" cols="30" rows="10">{{ old('remarks', $attendance->remarks) }}</textarea>
+                            <textarea name="remarks" id="remark-textarea" cols="10" rows="10">{{ old('remarks', $attendance->remarks) }}</textarea>
+                        </td>
+                        <td>
                             @error('remarks')
                                 <p class="error-text">{{ $message }}</p>
                             @enderror

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Attendance;
 use App\Models\Rest;
@@ -72,7 +73,7 @@ class UserAttendanceController extends Controller
         return view('attendance.index', compact('date', 'attendances'));
     }
 
-    public function detail($id) {
+    public function show($id) {
         $user = Auth::user();
 
         $attendance = Attendance::where('id', $id)
@@ -122,14 +123,14 @@ class UserAttendanceController extends Controller
             Rest::where('attendance_id', $attendance->id)->delete();
 
             for ($i = 0; $i < $count; $i++) {
-                $s = $starts[$i] ?? null;
-                $e = $ends[$i] ?? null;
+                $breakStart = $starts[$i] ?? null;
+                $breakEnd = $ends[$i] ?? null;
 
-                if (!empty($s) && !empty($e)) {
+                if (!empty($breakStart) && !empty($breakEnd)) {
                     Rest::create([
                         'attendance_id' => $attendance->id,
-                        'start_time' => $s,
-                        'end_time' => $e,
+                        'start_time' => $breakStart,
+                        'end_time' => $breakEnd,
                     ]);
                 }
             }
