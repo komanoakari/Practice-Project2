@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
 use App\Models\Rest;
 
+use App\Http\Requests\UpdateAttendanceRequest;
 
 class UserAttendanceController extends Controller
 {
@@ -69,5 +70,107 @@ class UserAttendanceController extends Controller
             }
         }
         return view('attendance.index', compact('date', 'attendances'));
+    }
+
+    public function detail($id) {
+        $user = Auth::user();
+
+        $attendance = Attendance::where('id', $id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$attendance) {
+            return redirect()->route('attendance.index');
+        }
+
+        $rests = Rest::where('attendance_id', $attendance->id)->get();
+
+        return view('attendance.detail', compact('attendance', 'rests'));
+    }
+
+    public function update(UpdateAttendanceRequest $request, $id) {
+        $user = Auth::user();
+
+        $attendance = Attendance::where('id', $id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$attendance) {
+            return redirect()->route('attendance.index');
+        }
+
+        $breakValidation = $this->validateBreakTimes($request);
+
+        if ($breakValidation!== true) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($breakValidation);
+        }
+
+        $starts = $request->input('break_starts', []);
+        $ends = $request->input('break_ends', []);
+        $count = max(count($starts), count($ends));
+
+        DB::transaction(function () use ($attendance, $request, $starts, $ends, $count) {
+            $attendance->update([
+                'start_time' => $request->start_time,
+                'end_time' => $request->end_time,
+                'remarks' => $request->remarks,
+                'status' => '承認待ち',
+            ]);
+
+            Rest::where('attendance_id', $attendance->id)->delete();
+
+            for ($i = 0; $i < $count; $i++) {
+                $s = $starts[$i] ?? null;
+                $e = $ends[$i] ?? null;
+
+                if (!empty($s) && !empty($e)) {
+                    Rest::create([
+                        'attendance_id' => $attendance->id,
+                        'start_time' => $s,
+                        'end_time' => $e,
+                    ]);
+                }
+            }
+        });
+        return redirect()->route('attendance.detail', $id)
+            ->with('success', '勤怠を更新し、「承認待ち」に変更しました');
+    }
+
+    private function validateBreakTimes($request)
+    {
+        $startTime = $request->start_time;
+        $endTime = $request->end_time;
+        $breakStarts = $request->input('break_starts', []);
+        $breakEnds = $request->input('break_ends', []);
+        $count = max(count($breakStarts), count($breakEnds));
+
+        for ($i = 0; $i < $count; $i++) {
+            $breakStart = $breakStarts[$i] ?? null;
+            $breakEnd = $breakEnds[$i] ?? null;
+
+            if (empty($breakStart) && empty($breakEnd)) {
+                continue;
+            }
+
+            if (empty($breakStart) || empty($breakEnd)) {
+                return ['break_error' => '休憩時間が不適切な値です'];
+            }
+
+            if ($breakStart < $startTime || $breakStart > $endTime) {
+                return ['break_error' => '休憩時間が不適切な値です'];
+            }
+
+            if ($breakEnd > $endTime) {
+                return ['break_error' => '休憩時間もしくは退勤時間が不適切な値です'];
+            }
+
+            if ($breakStart >= $breakEnd) {
+                return ['break_error' => '休憩時間が不適切な値です'];
+            }
+        }
+
+        return true;
     }
 }
