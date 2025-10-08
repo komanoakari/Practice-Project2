@@ -38,8 +38,8 @@ class UserAttendanceController extends Controller
 
             foreach ($rests as $rest) {
                 if ($rest->end_time) {
-                    $start = Carbon::parse($rest->start_time);
-                    $end = Carbon::parse($rest->end_time);
+                    $start = Carbon::parse($attendance->date . ' ' . $rest->start_time);
+                    $end = Carbon::parse($attendance->date . ' ' . $rest->end_time);
                     $breakMinutes = $breakMinutes + $end->diffInMinutes($start);
                 }
             }
@@ -53,11 +53,11 @@ class UserAttendanceController extends Controller
             }
 
             if ($attendance->end_time) {
-                $dayStart = Carbon::parse($attendance->start_time);
-                $dayEnd = Carbon::parse($attendance->end_time);
+                $dayStart = Carbon::parse($attendance->date . ' ' . $attendance->start_time);
+                $dayEnd = Carbon::parse($attendance->date . ' ' . $attendance->end_time);
                 $totalMinutes = $dayEnd->diffInMinutes($dayStart) - $breakMinutes;
 
-                if ($totalMinutes > 0) {
+                if ($totalMinutes >= 0) {
                     $hours = floor($totalMinutes / 60);
                     $mins = $totalMinutes % 60;
                     $attendance->total_time = sprintf('%02d:%02d', $hours, $mins);
