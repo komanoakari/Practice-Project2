@@ -50,12 +50,9 @@
                             <input type="time" name="end_time" value="{{ \Carbon\Carbon::parse($attendance->end_time)->format('H:i') }}">
                         </td>
                         <td>
-                            @error('start_time')
-                            <p class="error-text">{{ $message }}</p>
-                            @enderror
-                            @error('end_time')
-                            <p class="error-text">{{ $message }}</p>
-                            @enderror
+                            @if($errors->has('start_time') || $errors->has('end_time'))
+                                <p class="error-text">{{ $errors->first('start_time') ?: $errors->first('end_time') }}</p>
+                            @endif
                         </td>
                     @endif
                 </tr>
@@ -87,7 +84,7 @@
                 </tr>
                 @endforeach
 
-                @if($attendance->status === '承認待ち')
+                @if($attendance->status !== '承認待ち')
                 <tr class="table-row">
                     <th class="label">休憩{{ $rests->count() + 1 }}</th>
                     <td class="data">
@@ -97,7 +94,11 @@
                     <td class="data">
                         <input type="time" name="break_ends[]">
                     </td>
-                    <td></td>
+                    <td>
+                        @error('break_error')
+                        <p class="error-text">{{ $message }}</p>
+                        @enderror
+                    </td>
                 </tr>
                 @endif
 
@@ -113,7 +114,7 @@
                         </td>
                     @else
                         <td class="data" colspan="3">
-                            <textarea name="remarks" id="remark-textarea" cols="10" rows="10">{{ old('remarks', $attendance->remarks) }}</textarea>
+                            <textarea name="remarks" id="remark-textarea" cols="20" rows="5">{{ old('remarks', $attendance->remarks) }}</textarea>
                         </td>
                         <td>
                             @error('remarks')

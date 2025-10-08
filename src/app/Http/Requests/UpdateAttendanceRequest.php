@@ -35,7 +35,7 @@ class UpdateAttendanceRequest extends FormRequest
         return [
             'start_time.required' => '出勤時間を入力してください',
             'start_time.before' => '出勤時間もしくは退勤時間が不適切な値です',
-            'end_time.required' => '出勤時間を入力してください',
+            'end_time.required' => '退勤時間を入力してください',
             'end_time.after' => '出勤時間もしくは退勤時間が不適切な値です',
             'remarks.required' => '備考を記入してください',
         ];
