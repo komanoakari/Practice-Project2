@@ -8,6 +8,10 @@
 <h1 class="index-heading">勤怠一覧</h1>
 
 <div class="index-contents">
+    @if(session('success'))
+    <p class="success-message">{{ session('success') }}</p>
+    @endif
+
     <div class="calender-container">
         <a href="{{ route('attendance.index', ['date' => $date->copy()->subMonth()->format('Y-m')]) }}" class="last-month-pagination">先月</a>
         <img src="{{ asset('images/calender-icon.png') }}" alt="カレンダーアイコン" class="calender-icon">
