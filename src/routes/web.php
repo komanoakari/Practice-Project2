@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\UserAttendanceController;
 use App\Http\Controllers\UserCorrectionController;
+use App\Http\Controllers\LoginController;
 
 Route::middleware(['auth','verified'])->group(function() {
     Route::get('/attendance', [AttendanceController::class, 'stamp'])->name('attendance.stamp');
@@ -39,3 +40,21 @@ Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', '認証メールを再送信しました');
 })->middleware('auth')->name('verification.send');
+
+
+Route::prefix('admin')->group(function() {
+    Route::get('login', function() {
+        return app(\Laravel\Fortify\Contracts\LoginViewResponse::class)->toResponse(request());
+    })->middleware('guest:admins')->name('admin.login');
+
+    Route::middleware('auth:admins')->group(function () {
+        Route::post('logout', function (Request $request) {
+            Auth::guard('admins')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return app(\Laravel\Fortify\Contracts\LogoutResponse::class)->toResponse($request);
+        })->name('admin.logout');
+
+        Route::get('attendance/list', [AdminAttendanceController::class, 'index'])->name('admin.index');
+    });
+});

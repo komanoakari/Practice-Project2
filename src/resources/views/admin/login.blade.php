@@ -6,10 +6,10 @@
 
 @section('content')
 <div class="contents">
-    <h2 class="heading">ログイン</h2>
+    <h2 class="heading">管理者ログイン</h2>
 
     <div class="form">
-        <form action="{{ route('login') }}" class="form-inner" method="post" novalidate>
+        <form action="{{ route('admin.login') }}" class="form-inner" method="post" novalidate>
         @csrf
             <div class="form-group">
                 <label for="email" class="form-label">メールアドレス</label>
@@ -26,8 +26,7 @@
                     <p class="error-message">{{ $message }}</p>
                 @enderror
             </div>
-            <input type="submit" class="form-btn" value="ログインする">
-            <a href="{{ route('register') }}" class="register-link">会員登録はこちら</a>
+            <input type="submit" class="form-btn" value="管理者ログインする">
         </form>
     </div>
 </div>

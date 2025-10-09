@@ -30,6 +30,9 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(LoginViewResponse::class, function() {
             return new class implements LoginViewResponse {
                 public function toResponse($request) {
+                    if ($request->is('admin/*')) {
+                        return response()->view('admin.login');
+                    }
                     return response()->view('auth.login');
                 }
             };
@@ -54,6 +57,9 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(LoginResponse::class, function() {
             return new class implements LoginResponse {
                 public function toResponse($request) {
+                    if ($request->is('admin/*')) {
+                        return redirect()->route('admin.index');
+                    }
                     return redirect('/attendance');
                 }
             };
@@ -70,6 +76,9 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(LogoutResponse::class, function() {
             return new class implements LogoutResponse {
                 public function toResponse($request) {
+                    if ($request->is('admin/*')) {
+                        return redirect('/admin/login');
+                    }
                     return redirect('/login');
                 }
             };
@@ -87,6 +96,24 @@ class FortifyServiceProvider extends ServiceProvider
             \Laravel\Fortify\Http\Requests\RegisterRequest::class,
             \App\Http\Requests\RegisterRequest::class
         );
+
+        Fortify::authenticateUsing(function (Request $request) {
+            if ($request->is('admin/*')) {
+                $admin = Admin::where('email', $request->email)->first();
+
+                if ($admin && Hash::check($request->password, $admin->password)) {
+                    Auth::guard('admins')->login($admin);
+                    return $admin;
+                }
+            } else {
+                $user = User::where('email', $request->email)->first();
+
+                if ($user && Hash::check($request->password, $user->password)) {
+                    return $user;
+                }
+            }
+            return null;
+        });
 
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
