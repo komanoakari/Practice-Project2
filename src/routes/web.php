@@ -7,6 +7,8 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\UserAttendanceController;
 use App\Http\Controllers\UserCorrectionController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AdminAttendanceController;
 
 Route::middleware(['auth','verified'])->group(function() {
     Route::get('/attendance', [AttendanceController::class, 'stamp'])->name('attendance.stamp');
@@ -39,3 +41,18 @@ Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', '認証メールを再送信しました');
 })->middleware('auth')->name('verification.send');
+
+
+Route::prefix('admin')->group(function() {
+    Route::get('login', [LoginController::class, 'index'])
+        ->middleware('guest:admins')->name('admin.login');
+
+    Route::post('login', [LoginController::class, 'login'])
+        ->middleware('guest:admins');
+
+    Route::middleware('auth:admins')->group(function () {
+        Route::post('logout', [LoginController::class, 'logout'])->name('admin.logout');
+
+        Route::get('attendance/list', [AdminAttendanceController::class, 'index'])->name('admin.index');
+    });
+});

@@ -23,6 +23,11 @@ use Laravel\Fortify\Contracts\LogoutResponse;
 
 use App\Http\Requests\LoginRequest;
 
+use App\Models\Admin;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 class FortifyServiceProvider extends ServiceProvider
 {
     public function register(): void
@@ -87,6 +92,24 @@ class FortifyServiceProvider extends ServiceProvider
             \Laravel\Fortify\Http\Requests\RegisterRequest::class,
             \App\Http\Requests\RegisterRequest::class
         );
+
+        Fortify::authenticateUsing(function (Request $request) {
+            if ($request->is('admin/*')) {
+                $admin = Admin::where('email', $request->email)->first();
+
+                if ($admin && Hash::check($request->password, $admin->password)) {
+                    Auth::guard('admins')->login($admin);
+                    return $admin;
+                }
+            } else {
+                $user = User::where('email', $request->email)->first();
+
+                if ($user && Hash::check($request->password, $user->password)) {
+                    return $user;
+                }
+            }
+            return null;
+        });
 
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
