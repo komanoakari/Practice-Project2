@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Rest extends Model
+class AttendanceCorrection extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'attendance_id',
-        'start_time',
-        'end_time',
+        'applied_at',
+        'status',
+        'remarks'
     ];
 
     public function attendance()

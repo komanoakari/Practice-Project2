@@ -52,7 +52,7 @@
 
                 <tr class="table-row">
                     <th class="label">出勤・退勤</th>
-                    @if($attendance->status === '承認待ち')
+                    @if($correction && $correction->status === '承認待ち')
                         <td class="data">{{ \Carbon\Carbon::parse($attendance->start_time)->format('H:i') }}</td>
                         <td class="data-separator">〜</td>
                         <td class="data">{{ \Carbon\Carbon::parse($attendance->end_time)->format('H:i') }}</td>
@@ -74,7 +74,7 @@
                 @foreach($rests as $rest)
                 <tr class="table-row">
                     <th class="label">休憩{{ $loop->iteration }}</th>
-                    @if($attendance->status === '承認待ち')
+                    @if($correction && $correction->status === '承認待ち')
                         <td class="data">{{ \Carbon\Carbon::parse($rest->start_time)->format('H:i') }}</td>
                         <td class="data-separator">〜</td>
                         <td class="data">{{ \Carbon\Carbon::parse($rest->end_time)->format('H:i') }}</td>
@@ -94,7 +94,7 @@
                 </tr>
                 @endforeach
 
-                @if($attendance->status !== '承認待ち')
+                @if($correction && $correction->status !== '承認待ち')
                 <tr class="table-row">
                     <th class="label">休憩{{ $rests->count() + 1 }}</th>
                     <td class="data">
@@ -110,9 +110,9 @@
 
                 <tr class="table-row">
                     <th class="label">備考</th>
-                    @if($attendance->status === '承認待ち')
-                        <td class="data" colspan="3">{{ $attendance->remarks }}</td>
-                        <input type="hidden" name="remarks" value="{{ $attendance->remarks }}">
+                    @if($correction && $correction->status === '承認待ち')
+                        <td class="data" colspan="3">{{ $correction->remarks }}</td>
+                        <input type="hidden" name="remarks" value="{{ $correction->remarks }}">
                         <td>
                             @error('remarks')
                             <p class="error-text">{{ $message }}</p>
@@ -120,14 +120,14 @@
                         </td>
                     @else
                         <td class="data" colspan="3">
-                            <textarea name="remarks" id="remark-textarea" cols="20" rows="5">{{ old('remarks', $attendance->remarks) }}</textarea>
+                            <textarea name="remarks" id="remark-textarea" cols="20" rows="5">{{ old('remarks', $correction->remarks ?? '') }}</textarea>
                         </td>
                         <td></td>
                     @endif
                 </tr>
             </table>
 
-            @if($attendance->status === '承認待ち')
+            @if($correction && $correction->status === '承認待ち')
                 <p class="pending-text"><span class="pending-mark">*</span>承認待ちのため修正はできません。</p>
             @else
                 <button class="submit-btn" type="submit">修正</button>

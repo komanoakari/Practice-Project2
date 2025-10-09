@@ -14,8 +14,6 @@ class Attendance extends Model
         'date',
         'start_time',
         'end_time',
-        'status',
-        'remarks'
     ];
 
     public function user()
@@ -26,5 +24,16 @@ class Attendance extends Model
     public function rests()
     {
         return $this->hasMany(Rest::class);
+    }
+
+    public function corrections()
+    {
+        return $this->hasMany(AttendanceCorrection::class);
+    }
+
+    public function latestCorrection()
+    {
+        return $this->hasOne(AttendanceCorrection::class)
+            ->latest('applied_at');
     }
 }

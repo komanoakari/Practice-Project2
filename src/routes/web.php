@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\UserAttendanceController;
+use App\Http\Controllers\UserCorrectionController;
 
 Route::middleware(['auth','verified'])->group(function() {
     Route::get('/attendance', [AttendanceController::class, 'stamp'])->name('attendance.stamp');
@@ -18,8 +19,11 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::get('/attendance/list', [UserAttendanceController::class, 'index'])->name('attendance.index');
 
     Route::get('/attendance/detail/{id}', [UserAttendanceController::class, 'show'])->name('attendance.detail');
-
     Route::post('/attendance/detail/{id}', [UserAttendanceController::class, 'update'])->name('attendance.update');
+
+    Route::get('/stamp_correction_request/list', [UserCorrectionController::class, 'index'])->name('correction.index');
+
+
 });
 
 Route::get('/email/verify', function() {

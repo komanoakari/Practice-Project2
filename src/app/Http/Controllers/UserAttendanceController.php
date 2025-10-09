@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Attendance;
+use App\Models\AttendanceCorrection;
 use App\Models\Rest;
 
 use App\Http\Requests\UpdateAttendanceRequest;
@@ -25,7 +26,6 @@ class UserAttendanceController extends Controller
 
         $startDate = $date->copy()->startOfMonth()->toDateString();
         $endDate = $date->copy()->endOfMonth()->toDateString();
-
 
         $attendances = Attendance::where('user_id', $user->id)
             ->where('date', '>=', $startDate)
@@ -86,7 +86,11 @@ class UserAttendanceController extends Controller
 
         $rests = Rest::where('attendance_id', $attendance->id)->get();
 
-        return view('attendance.detail', compact('attendance', 'rests'));
+        $correction = AttendanceCorrection::where('attendance_id', $attendance->id)
+            ->latest('applied_at')
+            ->first();
+
+        return view('attendance.detail', compact('attendance', 'rests', 'correction'));
     }
 
     public function update(UpdateAttendanceRequest $request, $id) {
@@ -116,8 +120,6 @@ class UserAttendanceController extends Controller
             $attendance->update([
                 'start_time' => $request->start_time,
                 'end_time' => $request->end_time,
-                'remarks' => $request->remarks,
-                'status' => '承認待ち',
             ]);
 
             Rest::where('attendance_id', $attendance->id)->delete();
@@ -134,6 +136,13 @@ class UserAttendanceController extends Controller
                     ]);
                 }
             }
+
+            AttendanceCorrection::create([
+                'attendance_id' => $attendance->id,
+                'applied_at' => now(),
+                'status' => '承認待ち',
+                'remarks' => $request->remarks,
+            ]);
         });
         return redirect()->route('attendance.detail', $id)
             ->with('success', '勤怠を更新し、「承認待ち」に変更しました');
