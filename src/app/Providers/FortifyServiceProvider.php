@@ -23,6 +23,11 @@ use Laravel\Fortify\Contracts\LogoutResponse;
 
 use App\Http\Requests\LoginRequest;
 
+use App\Models\Admin;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 class FortifyServiceProvider extends ServiceProvider
 {
     public function register(): void
@@ -30,9 +35,6 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(LoginViewResponse::class, function() {
             return new class implements LoginViewResponse {
                 public function toResponse($request) {
-                    if ($request->is('admin/*')) {
-                        return response()->view('admin.login');
-                    }
                     return response()->view('auth.login');
                 }
             };
@@ -57,9 +59,6 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(LoginResponse::class, function() {
             return new class implements LoginResponse {
                 public function toResponse($request) {
-                    if ($request->is('admin/*')) {
-                        return redirect()->route('admin.index');
-                    }
                     return redirect('/attendance');
                 }
             };
@@ -76,9 +75,6 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(LogoutResponse::class, function() {
             return new class implements LogoutResponse {
                 public function toResponse($request) {
-                    if ($request->is('admin/*')) {
-                        return redirect('/admin/login');
-                    }
                     return redirect('/login');
                 }
             };
