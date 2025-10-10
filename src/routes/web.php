@@ -10,6 +10,7 @@ use App\Http\Controllers\UserCorrectionController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminAttendanceController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\ExportController;
 
 Route::middleware(['auth','verified'])->group(function() {
     Route::get('/attendance', [AttendanceController::class, 'stamp'])->name('attendance.stamp');
@@ -61,6 +62,7 @@ Route::prefix('admin')->group(function() {
 
         Route::get('staff/list', [AdminUserController::class, 'index'])->name('staff.index');
         Route::get('attendance/staff/{id}', [AdminUserController::class, 'monthly'])->name('staff.monthly');
+        Route::get('attendance/staff/export/{id}', [ExportController::class, 'export'])->name('export.monthly');
 
     });
 });
