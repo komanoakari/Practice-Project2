@@ -14,7 +14,7 @@
         <nav class="header-nav">
             <a href="/attendance" class="header-nav-item">勤怠</a>
             <a href="/attendance/list" class="header-nav-item">勤怠一覧</a>
-            <a href="/stamp_correction_request/list" class="header-nav-item">申請</a>
+            <a href="{{ route('correction.index') }}" class="header-nav-item">申請</a>
             <form action="{{ route('logout') }}" method="POST" class="header-nav-item">
                 @csrf
                 <button class="header-btn" type="submit">ログアウト</button>

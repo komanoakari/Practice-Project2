@@ -30,7 +30,7 @@
         </div>
         @enderror
 
-        <form action="{{ route('admin.update', ['id' => $attendance->id]) }}" method="POST" class="attendance-form">
+        <form action="{{ route('admin.update', ['id' => $attendance->id]) }}" method="POST" class="form">
             @csrf
 
             <table class="table">

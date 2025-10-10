@@ -1,7 +1,7 @@
-@extends('layouts.header-user')
+@extends('layouts.header-admin')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/correction-list.css') }}">
+<link rel="stylesheet" href="{{ asset('css/corrections.css') }}">
 @endsection
 
 @section('content')
@@ -9,8 +9,8 @@
 
 <div class="contents">
     <nav class="tabs">
-        <a href="{{ route('correction.index', ['tab' => 'pending-approval']) }}" class="tab {{ $tab === 'pending-approval' ? 'active' : '' }}">承認待ち</a>
-        <a href="{{ route('correction.index', ['tab' => 'approved']) }}" class="tab {{ $tab === 'approved' ? 'active' : '' }}">承認済み</a>
+        <a href="{{ route('corrections.index', ['tab' => 'pending-approval']) }}" class="tab {{ $tab === 'pending-approval' ? 'active' : '' }}">承認待ち</a>
+        <a href="{{ route('corrections.index', ['tab' => 'approved']) }}" class="tab {{ $tab === 'approved' ? 'active' : '' }}">承認済み</a>
     </nav>
 
     @if ($tab === 'pending-approval')
@@ -32,7 +32,7 @@
                     <td class="data">{{ $attendance->latestCorrection->remarks }}</td>
                     <td class="data">{{ \Carbon\Carbon::parse($attendance->latestCorrection->applied_at)->format('Y/m/d') }}</td>
                     <td class="data">
-                        <a href="{{ route('attendance.detail', ['id' => $attendance->id]) }}" class="detail-link">詳細</a>
+                        <a href="{{ route('corrections.show', ['id' => $attendance->id]) }}" class="detail-link">詳細</a>
                     </td>
                 </tr>
                 @endforeach
@@ -58,7 +58,7 @@
                     <td class="data">{{ $attendance->latestCorrection->remarks }}</td>
                     <td class="data">{{ \Carbon\Carbon::parse($attendance->latestCorrection->applied_at)->format('Y/m/d') }}</td>
                     <td class="data">
-                        <a href="{{ route('attendance.detail', ['id' => $attendance->id]) }}" class="detail-link">詳細</a>
+                        <a href="{{ route('corrections.show', ['id' => $attendance->id]) }}" class="detail-link">詳細</a>
                     </td>
                 </tr>
                 @endforeach

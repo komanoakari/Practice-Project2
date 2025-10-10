@@ -11,6 +11,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminAttendanceController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\AdminCorrectionController;
 
 Route::middleware(['auth','verified'])->group(function() {
     Route::get('/attendance', [AttendanceController::class, 'stamp'])->name('attendance.stamp');
@@ -26,8 +27,6 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::post('/attendance/detail/{id}', [UserAttendanceController::class, 'update'])->name('attendance.update');
 
     Route::get('/stamp_correction_request/list', [UserCorrectionController::class, 'index'])->name('correction.index');
-
-
 });
 
 Route::get('/email/verify', function() {
@@ -43,7 +42,6 @@ Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', '認証メールを再送信しました');
 })->middleware('auth')->name('verification.send');
-
 
 Route::prefix('admin')->group(function() {
     Route::get('login', [LoginController::class, 'index'])
@@ -64,5 +62,11 @@ Route::prefix('admin')->group(function() {
         Route::get('attendance/staff/{id}', [AdminUserController::class, 'monthly'])->name('staff.monthly');
         Route::get('attendance/staff/export/{id}', [ExportController::class, 'export'])->name('export.monthly');
 
+        Route::get('stamp_correction_request/list', [AdminCorrectionController::class, 'index'])->name('corrections.index');
+        Route::get('stamp_correction_request/approve/{id}', [AdminCorrectionController::class, 'show'])->name('corrections.show');
+        Route::post('stamp_correction_request/approve/{id}', [AdminCorrectionController::class, 'approved'])->name('corrections.approve');
     });
 });
+
+
+
