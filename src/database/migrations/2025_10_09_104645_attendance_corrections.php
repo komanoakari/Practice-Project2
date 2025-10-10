@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class AttendanceCorrections extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('attendance_corrections', function (Blueprint $table) {
@@ -23,11 +18,6 @@ class AttendanceCorrections extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('attendance_corrections');
