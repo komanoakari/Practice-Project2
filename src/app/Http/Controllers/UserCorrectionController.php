@@ -14,21 +14,22 @@ class UserCorrectionController extends Controller
 
         $user = Auth::user();
 
-        $pendingAttendances = Attendance::where('user_id', $user->id)
-            ->whereHas('latestCorrection', function($query) {
-                $query->where('status', '承認待ち');
-            })
-            ->with('latestCorrection')
-            ->orderBy('date', 'desc')
+        $allAttendances = Attendance::with('user', 'latestCorrection')
             ->get();
 
-        $approvedAttendances = Attendance::where('user_id', $user->id)
-            ->whereHas('latestCorrection', function($query) {
-                $query->where('status', '承認済み');
+        $pendingAttendances = $allAttendances
+            ->filter(function($attendance) {
+                return $attendance->latestCorrection && $attendance->latestCorrection->status === '承認待ち';
             })
-            ->with('latestCorrection')
-            ->orderBy('date', 'desc')
-            ->get();
+            ->sortByDesc('date')
+            ->values();
+
+        $approvedAttendances = $allAttendances
+            ->filter(function($attendance) {
+                return $attendance->latestCorrection && $attendance->latestCorrection->status === '承認済み';
+            })
+            ->sortByDesc('date')
+            ->values();
 
         return view('attendance.correction-list', compact('pendingAttendances', 'approvedAttendances', 'tab'));
     }

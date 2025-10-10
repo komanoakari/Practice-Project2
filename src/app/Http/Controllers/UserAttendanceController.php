@@ -115,10 +115,6 @@ class UserAttendanceController extends Controller
                 ->withErrors(['detail' => '勤怠データがありません']);
         }
 
-        if (!$attendance) {
-            return redirect()->route('attendance.index');
-        }
-
         $rests = Rest::where('attendance_id', $attendance->id)->get();
 
         $correction = AttendanceCorrection::where('attendance_id', $attendance->id)
