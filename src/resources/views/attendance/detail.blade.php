@@ -94,7 +94,7 @@
                 </tr>
                 @endforeach
 
-                @if($correction && $correction->status !== '承認待ち')
+                @if(!$correction || $correction->status !== '承認待ち')
                 <tr class="table-row">
                     <th class="label">休憩{{ $rests->count() + 1 }}</th>
                     <td class="data">

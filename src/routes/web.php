@@ -9,6 +9,7 @@ use App\Http\Controllers\UserAttendanceController;
 use App\Http\Controllers\UserCorrectionController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminAttendanceController;
+use App\Http\Controllers\AdminUserController;
 
 Route::middleware(['auth','verified'])->group(function() {
     Route::get('/attendance', [AttendanceController::class, 'stamp'])->name('attendance.stamp');
@@ -55,7 +56,11 @@ Route::prefix('admin')->group(function() {
 
         Route::get('attendance/list', [AdminAttendanceController::class, 'index'])->name('admin.index');
 
-        Route::get('attendance/{id}', [UserAttendanceController::class, 'show'])->name('admin.detail');
+        Route::get('attendance/{id}', [AdminAttendanceController::class, 'show'])->name('admin.detail');
+        Route::post('attendance/{id}', [AdminAttendanceController::class, 'update'])->name('admin.update');
+
+        Route::get('staff/list', [AdminUserController::class, 'index'])->name('staff.index');
+        Route::get('attendance/staff/{id}', [AdminUserController::class, 'monthly'])->name('staff.monthly');
 
     });
 });

@@ -70,6 +70,36 @@ class UserAttendanceController extends Controller
                 $attendance->total_time = '';
             }
         }
+
+        $attendanceByDate = [];
+        foreach ($attendances as $att) {
+            $attendancesByDate[$att->date] = $att;
+        }
+
+        $allAttendances = [];
+        $start = $date->copy()->startOfMonth();
+        $end = $date->copy()->endOfMonth();
+        $days = $start->daysInMonth;
+
+        for ($i = 0; $i < $days; $i++) {
+            $currentDate = $start->copy()->addDays($i);
+            $dateStr = $currentDate->format('Y-m-d');
+
+            if (isset($attendancesByDate[$dateStr])) {
+                $allAttendances[] = $attendancesByDate[$dateStr];
+            } else {
+                $empty = new \stdClass();
+                $empty->id = null;
+                $empty->date = $dateStr;
+                $empty->start_time = null;
+                $empty->end_time = null;
+                $empty->break_time = '';
+                $empty->total_time = '';
+                $allAttendances[] = $empty;
+            }
+        }
+        $attendances = $allAttendances;
+
         return view('attendance.index', compact('date', 'attendances'));
     }
 
@@ -79,6 +109,11 @@ class UserAttendanceController extends Controller
         $attendance = Attendance::where('id', $id)
             ->where('user_id', $user->id)
             ->first();
+
+        if (!$attendance) {
+            return redirect()->back()
+                ->withErrors(['detail' => '勤怠データがありません']);
+        }
 
         if (!$attendance) {
             return redirect()->route('attendance.index');

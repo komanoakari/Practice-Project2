@@ -30,7 +30,7 @@
         </div>
         @enderror
 
-        <form action="{{ route('attendance.update', ['id' => $attendance->id]) }}" method="POST" class="attendance-form">
+        <form action="{{ route('admin.update', ['id' => $attendance->id]) }}" method="POST" class="attendance-form">
             @csrf
 
             <table class="table">
@@ -94,7 +94,7 @@
                 </tr>
                 @endforeach
 
-                @if($correction && $correction->status !== '承認待ち')
+                @if(!$correction || $correction->status !== '承認待ち')
                 <tr class="table-row">
                     <th class="label">休憩{{ $rests->count() + 1 }}</th>
                     <td class="data">

@@ -1,11 +1,11 @@
-@extends('layouts.header-user')
+@extends('layouts.header-admin')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/index.css') }}">
+<link rel="stylesheet" href="{{ asset('css/staff-monthly.css') }}">
 @endsection
 
 @section('content')
-<h1 class="heading">勤怠一覧</h1>
+<h1 class="heading">{{ $user->name }}さんの勤怠</h1>
 
 <div class="contents">
     @error('detail')
@@ -15,10 +15,10 @@
     @enderror
 
     <div class="calender-container">
-        <a href="{{ route('attendance.index', ['date' => $date->copy()->subMonth()->format('Y-m')]) }}" class="last-month-pagination">先月</a>
+        <a href="{{ route('staff.monthly', ['id' => $user->id, 'date' => $date->copy()->subMonth()->format('Y-m')]) }}" class="month-pagination">先月</a>
         <img src="{{ asset('images/calender-icon.png') }}" alt="カレンダーアイコン" class="calender-icon">
         <div class="this-month">{{ $date->format('Y/m') }}</div>
-        <a href="{{ route('attendance.index', ['date' => $date->copy()->addMonth()->format('Y-m')]) }}" class="next-month-pagination">翌月</a>
+        <a href="{{ route('staff.monthly', ['id' => $user->id, 'date' => $date->copy()->addMonth()->format('Y-m')]) }}" class="month-pagination">翌月</a>
     </div>
 
     <table class="table">
@@ -39,9 +39,9 @@
             <td class="data">{{ $attendance->total_time }}</td>
             <td class="data">
                 @if($attendance->id)
-                    <a href="{{ route('attendance.detail', ['id' => $attendance->id]) }}" class="detail-link">詳細</a>
+                    <a href="{{ route('admin.detail', ['id' => $attendance->id]) }}" class="detail-link">詳細</a>
                 @else
-                    <a href="{{ route('attendance.detail', ['id' => 0]) }}" class="detail-link">詳細</a>
+                    <a href="{{ route('admin.detail', ['id' => 0]) }}" class="detail-link">詳細</a>
                 @endif
             </td>
         </tr>
