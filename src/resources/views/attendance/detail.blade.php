@@ -111,8 +111,8 @@
                 <tr class="table-row">
                     <th class="label">備考</th>
                     @if($correction && $correction->status === '承認待ち')
-                        <td class="data" colspan="3">{{ $correction->remarks }}</td>
-                        <input type="hidden" name="remarks" value="{{ $correction->remarks }}">
+                        <td class="data" colspan="3">{{ $attendance->remarks }}</td>
+                        <input type="hidden" name="remarks" value="{{ $attendance->remarks }}">
                         <td>
                             @error('remarks')
                             <p class="error-text">{{ $message }}</p>
@@ -120,7 +120,7 @@
                         </td>
                     @else
                         <td class="data" colspan="3">
-                            <textarea name="remarks" id="remark-textarea" cols="20" rows="5">{{ old('remarks', $correction->remarks ?? '') }}</textarea>
+                            <textarea name="remarks" id="remark-textarea" cols="20" rows="5">{{ old('remarks', $attendance->remarks ?? '') }}</textarea>
                         </td>
                         <td></td>
                     @endif
@@ -129,6 +129,8 @@
 
             @if($correction && $correction->status === '承認待ち')
                 <p class="pending-text"><span class="pending-mark">*</span>承認待ちのため修正はできません。</p>
+            @elseif($correction && $correction->status === '承認済み' && $from === 'corrections')
+                <p class="approved-sign">承認済み</p>
             @else
                 <button class="submit-btn" type="submit">修正</button>
             @endif

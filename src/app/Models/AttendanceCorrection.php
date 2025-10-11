@@ -13,7 +13,6 @@ class AttendanceCorrection extends Model
         'attendance_id',
         'applied_at',
         'status',
-        'remarks'
     ];
 
     public function attendance()

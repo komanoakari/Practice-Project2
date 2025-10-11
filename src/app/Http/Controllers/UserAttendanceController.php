@@ -103,7 +103,7 @@ class UserAttendanceController extends Controller
         return view('attendance.index', compact('date', 'attendances'));
     }
 
-    public function show($id) {
+    public function show(Request $request, $id) {
         $user = Auth::user();
 
         $attendance = Attendance::where('id', $id)
@@ -121,7 +121,9 @@ class UserAttendanceController extends Controller
             ->latest('applied_at')
             ->first();
 
-        return view('attendance.detail', compact('attendance', 'rests', 'correction'));
+        $from = $request->query('from');
+
+        return view('attendance.detail', compact('attendance', 'rests', 'correction', 'from'));
     }
 
     public function update(UpdateAttendanceRequest $request, $id) {
@@ -151,6 +153,7 @@ class UserAttendanceController extends Controller
             $attendance->update([
                 'start_time' => $request->start_time,
                 'end_time' => $request->end_time,
+                'remarks' => $request->remarks,
             ]);
 
             Rest::where('attendance_id', $attendance->id)->delete();
@@ -172,7 +175,6 @@ class UserAttendanceController extends Controller
                 'attendance_id' => $attendance->id,
                 'applied_at' => now(),
                 'status' => '承認待ち',
-                'remarks' => $request->remarks,
             ]);
         });
         return redirect()->route('attendance.detail', $id)

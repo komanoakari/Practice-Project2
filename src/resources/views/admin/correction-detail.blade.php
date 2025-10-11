@@ -56,8 +56,8 @@
 
                 <tr class="table-row">
                     <th class="label">備考</th>
-                        <td class="data" colspan="3">{{ $correction->remarks }}</td>
-                        <input type="hidden" name="remarks" value="{{ $correction->remarks }}">
+                        <td class="data" colspan="3">{{ $attendance->remarks }}</td>
+                        <input type="hidden" name="remarks" value="{{ $attendance->remarks }}">
                 </tr>
             </table>
 

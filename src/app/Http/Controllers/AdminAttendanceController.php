@@ -109,6 +109,7 @@ class AdminAttendanceController extends Controller
             $attendance->update([
                 'start_time' => $request->start_time,
                 'end_time' => $request->end_time,
+                'remarks' => $request->remarks,
             ]);
 
             Rest::where('attendance_id', $attendance->id)->delete();
@@ -125,13 +126,6 @@ class AdminAttendanceController extends Controller
                     ]);
                 }
             }
-
-            AttendanceCorrection::create([
-                'attendance_id' => $attendance->id,
-                'applied_at' => now(),
-                'status' => '管理者により修正済み',
-                'remarks' => $request->remarks,
-            ]);
         });
         return redirect()->route('admin.detail', $id)
             ->with('success', '勤怠を更新しました');

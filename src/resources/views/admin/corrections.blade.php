@@ -29,7 +29,7 @@
                     <td class="data">{{ $attendance->latestCorrection->status }}</td>
                     <td class="data">{{ $attendance->user->name }}</td>
                     <td class="data">{{ \Carbon\Carbon::parse($attendance->date)->format('Y/m/d') }}</td>
-                    <td class="data">{{ $attendance->latestCorrection->remarks }}</td>
+                    <td class="data">{{ $attendance->remarks }}</td>
                     <td class="data">{{ \Carbon\Carbon::parse($attendance->latestCorrection->applied_at)->format('Y/m/d') }}</td>
                     <td class="data">
                         <a href="{{ route('corrections.show', ['id' => $attendance->id]) }}" class="detail-link">詳細</a>
@@ -55,7 +55,7 @@
                     <td class="data">{{ $attendance->latestCorrection->status }}</td>
                     <td class="data">{{ $attendance->user->name }}</td>
                     <td class="data">{{ \Carbon\Carbon::parse($attendance->date)->format('Y/m/d') }}</td>
-                    <td class="data">{{ $attendance->latestCorrection->remarks }}</td>
+                    <td class="data">{{ $attendance->remarks }}</td>
                     <td class="data">{{ \Carbon\Carbon::parse($attendance->latestCorrection->applied_at)->format('Y/m/d') }}</td>
                     <td class="data">
                         <a href="{{ route('corrections.show', ['id' => $attendance->id]) }}" class="detail-link">詳細</a>
