@@ -13,11 +13,18 @@ class AttendanceCorrection extends Model
         'attendance_id',
         'applied_at',
         'status',
-        'remarks'
+        'start_time',
+        'end_time',
+        'remarks',
     ];
 
     public function attendance()
     {
         return $this->belongsTo(Attendance::class);
+    }
+
+    public function correctionRests()
+    {
+        return $this->hasMany(CorrectionRest::class, 'correction_id');
     }
 }

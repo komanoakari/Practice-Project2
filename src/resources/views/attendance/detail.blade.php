@@ -53,6 +53,13 @@
                 <tr class="table-row">
                     <th class="label">出勤・退勤</th>
                     @if($correction && $correction->status === '承認待ち')
+                        <td class="data">{{ \Carbon\Carbon::parse($correction->start_time)->format('H:i') }}</td>
+                        <td class="data-separator">〜</td>
+                        <td class="data">{{ \Carbon\Carbon::parse($correction->end_time)->format('H:i') }}</td>
+                        <td></td>
+                        <input type="hidden" name="start_time" value="{{ $correction->start_time }}">
+                        <input type="hidden" name="end_time" value="{{ $correction->end_time }}">
+                    @elseif($correction && $correction->status === '承認済み' && $from === 'correction')
                         <td class="data">{{ \Carbon\Carbon::parse($attendance->start_time)->format('H:i') }}</td>
                         <td class="data-separator">〜</td>
                         <td class="data">{{ \Carbon\Carbon::parse($attendance->end_time)->format('H:i') }}</td>
@@ -81,6 +88,13 @@
                         <td></td>
                         <input type="hidden" name="break_starts[]" value="{{ $rest->start_time }}">
                         <input type="hidden" name="break_ends[]" value="{{ $rest->end_time }}">
+                    @elseif($correction && $correction->status === '承認済み' && $from === 'correction')
+                        <td class="data">{{ \Carbon\Carbon::parse($rest->start_time)->format('H:i') }}</td>
+                        <td class="data-separator">〜</td>
+                        <td class="data">{{ \Carbon\Carbon::parse($rest->end_time)->format('H:i') }}</td>
+                        <td></td>
+                        <input type="hidden" name="break_starts[]" value="{{ $rest->start_time }}">
+                        <input type="hidden" name="break_ends[]" value="{{ $rest->end_time }}">
                     @else
                         <td class="data">
                             <input type="time" name="break_starts[]" value="{{ \Carbon\Carbon::parse($rest->start_time)->format('H:i') }}">
@@ -94,7 +108,7 @@
                 </tr>
                 @endforeach
 
-                @if(!$correction || $correction->status !== '承認待ち')
+                @if(!$correction || ($correction->status !== '承認待ち' && !($correction->status === '承認済み' && $from === 'correction')))
                 <tr class="table-row">
                     <th class="label">休憩{{ $rests->count() + 1 }}</th>
                     <td class="data">
@@ -118,9 +132,17 @@
                             <p class="error-text">{{ $message }}</p>
                             @enderror
                         </td>
+                    @elseif($correction && $correction->status === '承認済み' && $from === 'correction')
+                        <td class="data" colspan="3">{{ $attendance->remarks }}</td>
+                        <input type="hidden" name="remarks" value="{{ $attendance->remarks }}">
+                        <td>
+                            @error('remarks')
+                            <p class="error-text">{{ $message }}</p>
+                            @enderror
+                        </td>
                     @else
                         <td class="data" colspan="3">
-                            <textarea name="remarks" id="remark-textarea" cols="20" rows="5">{{ old('remarks', $correction->remarks ?? '') }}</textarea>
+                            <textarea name="remarks" id="remark-textarea" cols="20" rows="5">{{ old('remarks', $attendance->remarks ?? '') }}</textarea>
                         </td>
                         <td></td>
                     @endif
@@ -129,6 +151,8 @@
 
             @if($correction && $correction->status === '承認待ち')
                 <p class="pending-text"><span class="pending-mark">*</span>承認待ちのため修正はできません。</p>
+            @elseif($correction && $correction->status === '承認済み' && $from === 'correction')
+                <p class="approved-sign">承認済み</p>
             @else
                 <button class="submit-btn" type="submit">修正</button>
             @endif

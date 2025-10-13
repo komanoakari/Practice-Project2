@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\AttendanceCorrection;
 use App\Models\Attendance;
 
 class UserCorrectionController extends Controller
@@ -14,23 +14,29 @@ class UserCorrectionController extends Controller
 
         $user = Auth::user();
 
-        $allAttendances = Attendance::with('user', 'latestCorrection')
+        $pendingAttendances = Attendance::where('user_id', $user->id)
+            ->whereHas('corrections', function($query) {
+                $query->where('status', '承認待ち');
+            })
+            ->with(['user'])
+            ->orderBy('date', 'desc')
             ->get();
 
-        $pendingAttendances = $allAttendances
-            ->filter(function($attendance) {
-                return $attendance->latestCorrection && $attendance->latestCorrection->status === '承認待ち';
-            })
-            ->sortByDesc('date')
-            ->values();
+        foreach ($pendingAttendances as $attendance) {
+            $attendance->latestCorrection = AttendanceCorrection::where('attendance_id', $attendance->id)
+                ->where('status', '承認待ち')
+                ->latest('applied_at')
+                ->first();
+        }
 
-        $approvedAttendances = $allAttendances
-            ->filter(function($attendance) {
-                return $attendance->latestCorrection && $attendance->latestCorrection->status === '承認済み';
+        $approvedCorrections = AttendanceCorrection::where('status', '承認済み')
+            ->whereHas('attendance', function($query) use ($user) {
+                $query->where('user_id', $user->id);
             })
-            ->sortByDesc('date')
-            ->values();
+            ->with(['attendance.user'])
+            ->orderBy('applied_at', 'desc')
+            ->get();
 
-        return view('attendance.correction-list', compact('pendingAttendances', 'approvedAttendances', 'tab'));
+        return view('attendance.correction-list', compact('pendingAttendances', 'approvedCorrections', 'tab'));
     }
 }
