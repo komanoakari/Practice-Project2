@@ -13,6 +13,9 @@ class AttendanceCorrections extends Migration
             $table->foreignId('attendance_id')->constrained()->cascadeOnDelete();
             $table->timestamp('applied_at');
             $table->string('status')->default('未申請');
+            $table->time('start_time')->nullable();
+            $table->time('end_time')->nullable();
+            $table->text('remarks')->nullable();
             $table->timestamps();
         });
     }

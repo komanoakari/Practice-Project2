@@ -24,15 +24,15 @@
                     <th class="label">申請日時</th>
                     <th class="label">詳細</th>
                 </tr>
-                @foreach($pendingAttendances as $attendance)
+                @foreach($pendingCorrections as $correction)
                 <tr class="table-row">
-                    <td class="data">{{ $attendance->latestCorrection->status }}</td>
-                    <td class="data">{{ $attendance->user->name }}</td>
-                    <td class="data">{{ \Carbon\Carbon::parse($attendance->date)->format('Y/m/d') }}</td>
-                    <td class="data">{{ $attendance->remarks }}</td>
-                    <td class="data">{{ \Carbon\Carbon::parse($attendance->latestCorrection->applied_at)->format('Y/m/d') }}</td>
+                    <td class="data">{{ $correction->status }}</td>
+                    <td class="data">{{ $correction->attendance->user->name }}</td>
+                    <td class="data">{{ \Carbon\Carbon::parse($correction->attendance->date)->format('Y/m/d') }}</td>
+                    <td class="data">{{ $correction->remarks }}</td>
+                    <td class="data">{{ \Carbon\Carbon::parse($correction->applied_at)->format('Y/m/d') }}</td>
                     <td class="data">
-                        <a href="{{ route('corrections.show', ['id' => $attendance->id]) }}" class="detail-link">詳細</a>
+                        <a href="{{ route('corrections.show', ['id' => $correction->attendance_id]) }}" class="detail-link">詳細</a>
                     </td>
                 </tr>
                 @endforeach
@@ -50,15 +50,15 @@
                     <th class="label">申請日時</th>
                     <th class="label">詳細</th>
                 </tr>
-                @foreach($approvedAttendances as $attendance)
+                @foreach($approvedCorrections as $correction)
                 <tr class="table-row">
-                    <td class="data">{{ $attendance->latestCorrection->status }}</td>
-                    <td class="data">{{ $attendance->user->name }}</td>
-                    <td class="data">{{ \Carbon\Carbon::parse($attendance->date)->format('Y/m/d') }}</td>
-                    <td class="data">{{ $attendance->remarks }}</td>
-                    <td class="data">{{ \Carbon\Carbon::parse($attendance->latestCorrection->applied_at)->format('Y/m/d') }}</td>
+                    <td class="data">{{ $correction->status }}</td>
+                    <td class="data">{{ $correction->attendance->user->name }}</td>
+                    <td class="data">{{ \Carbon\Carbon::parse($correction->attendance->date)->format('Y/m/d') }}</td>
+                    <td class="data">{{ $correction->remarks }}</td>
+                    <td class="data">{{ \Carbon\Carbon::parse($correction->applied_at)->format('Y/m/d') }}</td>
                     <td class="data">
-                        <a href="{{ route('corrections.show', ['id' => $attendance->id]) }}" class="detail-link">詳細</a>
+                        <a href="{{ route('corrections.show', ['id' => $correction->attendance_id, 'correction_id' => $correction->id]) }}" class="detail-link">詳細</a>
                     </td>
                 </tr>
                 @endforeach

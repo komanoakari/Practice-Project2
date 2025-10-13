@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Attendance;
-use App\Models\AttendanceCorrection;
 use App\Models\Rest;
+use App\Models\AttendanceCorrection;
+use App\Models\CorrectionRest;
 
 use App\Http\Requests\UpdateAttendanceRequest;
 
@@ -117,11 +118,34 @@ class UserAttendanceController extends Controller
 
         $rests = Rest::where('attendance_id', $attendance->id)->get();
 
-        $correction = AttendanceCorrection::where('attendance_id', $attendance->id)
-            ->latest('applied_at')
-            ->first();
-
         $from = $request->query('from');
+        $correctionId = $request->query('correction_id');
+
+        if ($correctionId) {
+            $correction = AttendanceCorrection::where('id', $correctionId)
+                ->where('attendance_id', $attendance->id)
+                ->first();
+        } else {
+            $correction = AttendanceCorrection::where('attendance_id', $attendance->id)
+                ->latest('applied_at')
+                ->first();
+        }
+
+        if ($correction && ($correction->status === '承認待ち' || ($correction->status === '承認済み' && $from === 'correction'))) {
+            $rests = CorrectionRest::where('correction_id', $correction->id)->get();
+        }
+
+        if ($from === 'correction' && $correction && $correction->status === '承認済み') {
+            $correctionRests = CorrectionRest::where('correction_id', $correction->id)->get();
+
+            $displayAttendance = clone $attendance;
+            $displayAttendance->start_time = $correction->start_time;
+            $displayAttendance->end_time = $correction->end_time;
+            $displayAttendance->remarks = $correction->remarks;
+
+            return view('attendance.detail', compact('displayAttendance', 'rests', 'from', 'correction'))
+                ->with('attendance', $displayAttendance);
+        }
 
         return view('attendance.detail', compact('attendance', 'rests', 'correction', 'from'));
     }
@@ -150,35 +174,30 @@ class UserAttendanceController extends Controller
         $count = max(count($starts), count($ends));
 
         DB::transaction(function () use ($attendance, $request, $starts, $ends, $count) {
-            $attendance->update([
+            $correctionData = AttendanceCorrection::create([
+                'attendance_id' => $attendance->id,
+                'applied_at' => now(),
+                'status' => '承認待ち',
                 'start_time' => $request->start_time,
-                'end_time' => $request->end_time,
+                'end_time'=> $request->end_time,
                 'remarks' => $request->remarks,
             ]);
-
-            Rest::where('attendance_id', $attendance->id)->delete();
 
             for ($i = 0; $i < $count; $i++) {
                 $breakStart = $starts[$i] ?? null;
                 $breakEnd = $ends[$i] ?? null;
 
                 if (!empty($breakStart) && !empty($breakEnd)) {
-                    Rest::create([
-                        'attendance_id' => $attendance->id,
+                    CorrectionRest::create([
+                        'correction_id' => $correctionData->id,
                         'start_time' => $breakStart,
                         'end_time' => $breakEnd,
                     ]);
                 }
             }
-
-            AttendanceCorrection::create([
-                'attendance_id' => $attendance->id,
-                'applied_at' => now(),
-                'status' => '承認待ち',
-            ]);
         });
         return redirect()->route('attendance.detail', $id)
-            ->with('success', '勤怠を更新し、「承認待ち」に変更しました');
+            ->with('success', '勤怠修正を申請しました。');
     }
 
     private function validateBreakTimes($request)

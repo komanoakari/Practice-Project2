@@ -34,30 +34,25 @@
 
                 <tr class="table-row">
                     <th class="label">出勤・退勤</th>
-                        <td class="data">{{ \Carbon\Carbon::parse($attendance->start_time)->format('H:i') }}</td>
-                        <td class="data-separator">〜</td>
-                        <td class="data">{{ \Carbon\Carbon::parse($attendance->end_time)->format('H:i') }}</td>
-                        <td></td>
-                        <input type="hidden" name="start_time" value="{{ $attendance->start_time }}">
-                        <input type="hidden" name="end_time" value="{{ $attendance->end_time }}">
+                    <td class="data">{{ \Carbon\Carbon::parse($correction->start_time)->format('H:i') }}</td>
+                    <td class="data-separator">〜</td>
+                    <td class="data">{{ \Carbon\Carbon::parse($correction->end_time)->format('H:i') }}</td>
+                    <td></td>
                 </tr>
 
-                @foreach($rests as $rest)
+                @foreach($correctionRests as $correctionRest)
                 <tr class="table-row">
                     <th class="label">休憩{{ $loop->iteration }}</th>
-                        <td class="data">{{ \Carbon\Carbon::parse($rest->start_time)->format('H:i') }}</td>
-                        <td class="data-separator">〜</td>
-                        <td class="data">{{ \Carbon\Carbon::parse($rest->end_time)->format('H:i') }}</td>
-                        <td></td>
-                        <input type="hidden" name="break_starts[]" value="{{ $rest->start_time }}">
-                        <input type="hidden" name="break_ends[]" value="{{ $rest->end_time }}">
+                    <td class="data">{{ \Carbon\Carbon::parse($correctionRest->start_time)->format('H:i') }}</td>
+                    <td class="data-separator">〜</td>
+                    <td class="data">{{ \Carbon\Carbon::parse($correctionRest->end_time)->format('H:i') }}</td>
+                    <td></td>
                 </tr>
                 @endforeach
 
                 <tr class="table-row">
                     <th class="label">備考</th>
-                        <td class="data" colspan="3">{{ $attendance->remarks }}</td>
-                        <input type="hidden" name="remarks" value="{{ $attendance->remarks }}">
+                    <td class="data" colspan="3">{{ $correction->remarks ?? '' }}</td>
                 </tr>
             </table>
 
