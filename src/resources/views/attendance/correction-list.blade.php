@@ -1,4 +1,4 @@
-@extends('layouts.header-user')
+@extends('layouts.header')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/correction-list.css') }}">
@@ -37,7 +37,7 @@
                 </tr>
                 @endforeach
             </table>
-        </div>　
+        </div>
 
     @elseif ($tab === 'approved')
         <div class="panel-listed">

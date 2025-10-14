@@ -1,64 +1,128 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# 模擬案件\_勤怠管理アプリ
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+模擬案件\_勤怠管理アプリ（Laravel 8 + MySQL）。
+勤怠登録、修正申請、CSV エクスポートを実装しています。
 
-## About Laravel
+## 環境構築
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**Docker ビルド**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. `git clone git@github.com:komanoakari/Practice-Project2.git`
+2. cd Practice-Project1
+3. DockerDesktop アプリを立ち上げる
+4. `docker compose up -d --build`
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Laravel 環境構築**
 
-## Learning Laravel
+> `.env` は `./src/.env` に置きます。
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. `docker compose exec php bash`
+2. `cd src`
+3. `composer install`
+4. 「.env.example」を「.env」にコピー
+   `cp .env.example .env`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+5. .env に以下の環境変数を追加
 
-## Laravel Sponsors
+```text
+APP_URL=http://localhost:8018
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel_db
+DB_USERNAME=laravel_user
+DB_PASSWORD=laravel_pass
 
-### Premium Partners
+# MailHog
+MAIL_MAILER=smtp
+MAIL_HOST=mailhog
+MAIL_PORT=1025
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS=noreply@example.test
+MAIL_FROM_NAME="${APP_NAME}"
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+6. アプリケーションキーの作成
 
-## Contributing
+```bash
+php artisan key:generate
+php artisan config:clear
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+7. マイグレーション & 初期データ投入
 
-## Code of Conduct
+```bash
+php artisan migrate --seed
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```
 
-## Security Vulnerabilities
+## 使用技術(実行環境)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- PHP: 8.1.33
+- Laravel: 8.83.29
+- Nginx: 1.21.1
+- MySQL: 8.0.26
+- phpMyAdmin
+- MailHog
+- Docker Desktop（Compose v2）
+- Git
 
-## License
+## URL
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- 開発環境: http://localhost:8018/
+- phpMyAdmin: http://localhost:8019/（Server は `mysql`）
+- MailHog（受信 BOX）: http://localhost:8025/（SMTP は `mailhog:1025`）
+
+## phpMyAdmin ログイン
+
+- URL: http://localhost:8019/
+- Server: mysql
+- Username: laravel_user
+- Password: laravel_pass
+
+## PHPUnit テストケース
+
+> 起動
+
+```bash
+docker compose up -d
+```
+
+> テスト環境の.env 作成+鍵発行
+
+```bash
+cp src/.env.testing.example src/.env.testing
+docker compose exec php bash -lc 'cd src && php artisan key:generate --env=testing'
+```
+
+> テスト DB を作成
+
+```bash
+docker compose exec mysql mysql -uroot -p
+```
+
+-- 以下、MySQL プロンプト内で
+
+```bash
+CREATE DATABASE IF NOT EXISTS laravel_db_testing
+CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+GRANT ALL PRIVILEGES ON `laravel_db_testing`.* TO 'laravel_user'@'%';
+FLUSH PRIVILEGES;
+EXIT;
+```
+
+> テスト実行
+
+```bash
+docker compose exec php bash -lc 'cd src && php artisan test'
+```
+
+## ログイン用テストアカウント（Seeder で作成済み）
+
+- メール：test@example.com
+- パスワード：password
+
+## ER 図
+
+![ER図](er.png)

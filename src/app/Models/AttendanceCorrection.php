@@ -23,8 +23,8 @@ class AttendanceCorrection extends Model
         return $this->belongsTo(Attendance::class);
     }
 
-    public function correctionRests()
+    public function restCorrections()
     {
-        return $this->hasMany(CorrectionRest::class, 'correction_id');
+        return $this->hasMany(RestCorrection::class, 'correction_id');
     }
 }

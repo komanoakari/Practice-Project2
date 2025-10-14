@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Attendance;
 use App\Models\Rest;
 use App\Models\AttendanceCorrection;
-use App\Models\CorrectionRest;
+use App\Models\RestCorrection;
 
 use App\Http\Requests\UpdateAttendanceRequest;
 
@@ -132,11 +132,11 @@ class UserAttendanceController extends Controller
         }
 
         if ($correction && ($correction->status === '承認待ち' || ($correction->status === '承認済み' && $from === 'correction'))) {
-            $rests = CorrectionRest::where('correction_id', $correction->id)->get();
+            $rests = RestCorrection::where('correction_id', $correction->id)->get();
         }
 
         if ($from === 'correction' && $correction && $correction->status === '承認済み') {
-            $correctionRests = CorrectionRest::where('correction_id', $correction->id)->get();
+            $restCorrections = RestCorrection::where('correction_id', $correction->id)->get();
 
             $displayAttendance = clone $attendance;
             $displayAttendance->start_time = $correction->start_time;
@@ -161,14 +161,6 @@ class UserAttendanceController extends Controller
             return redirect()->route('attendance.index');
         }
 
-        $breakValidation = $this->validateBreakTimes($request);
-
-        if ($breakValidation!== true) {
-            return redirect()->back()
-                ->withInput()
-                ->withErrors($breakValidation);
-        }
-
         $starts = $request->input('break_starts', []);
         $ends = $request->input('break_ends', []);
         $count = max(count($starts), count($ends));
@@ -188,7 +180,7 @@ class UserAttendanceController extends Controller
                 $breakEnd = $ends[$i] ?? null;
 
                 if (!empty($breakStart) && !empty($breakEnd)) {
-                    CorrectionRest::create([
+                    RestCorrection::create([
                         'correction_id' => $correctionData->id,
                         'start_time' => $breakStart,
                         'end_time' => $breakEnd,
@@ -198,41 +190,5 @@ class UserAttendanceController extends Controller
         });
         return redirect()->route('attendance.detail', $id)
             ->with('success', '勤怠修正を申請しました。');
-    }
-
-    private function validateBreakTimes($request)
-    {
-        $startTime = $request->start_time;
-        $endTime = $request->end_time;
-        $breakStarts = $request->input('break_starts', []);
-        $breakEnds = $request->input('break_ends', []);
-        $count = max(count($breakStarts), count($breakEnds));
-
-        for ($i = 0; $i < $count; $i++) {
-            $breakStart = $breakStarts[$i] ?? null;
-            $breakEnd = $breakEnds[$i] ?? null;
-
-            if (empty($breakStart) && empty($breakEnd)) {
-                continue;
-            }
-
-            if (empty($breakStart) || empty($breakEnd)) {
-                return ['break_error' => '休憩時間が不適切な値です'];
-            }
-
-            if ($breakStart < $startTime || $breakStart > $endTime) {
-                return ['break_error' => '休憩時間が不適切な値です'];
-            }
-
-            if ($breakEnd > $endTime) {
-                return ['break_error' => '休憩時間もしくは退勤時間が不適切な値です'];
-            }
-
-            if ($breakStart >= $breakEnd) {
-                return ['break_error' => '休憩時間が不適切な値です'];
-            }
-        }
-
-        return true;
     }
 }

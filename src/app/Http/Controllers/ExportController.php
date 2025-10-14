@@ -29,6 +29,16 @@ class ExportController extends Controller
             ->orderBy('date')
             ->get();
 
+        $uniqueByDate = $attendances
+            ->groupBy('date')
+            ->map(function ($items) {
+                return $items->sortByDesc('end_time')->first();
+            })
+            ->sortKeys()
+            ->values();
+
+        $attendances = $uniqueByDate;
+
         foreach ($attendances as $attendance) {
             $breakMinutes = 0;
 

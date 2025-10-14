@@ -10,6 +10,10 @@ use App\Models\Attendance;
 class UserCorrectionController extends Controller
 {
     public function index(Request $request) {
+        if (Auth::guard('admins')->check()) {
+            return app(AdminCorrectionController::class)->index($request) ;
+        }
+
         $tab = $request->query('tab', 'pending-approval');
 
         $user = Auth::user();

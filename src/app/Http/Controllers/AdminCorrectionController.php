@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Attendance;
 use App\Models\Rest;
 use App\Models\AttendanceCorrection;
-use App\Models\CorrectionRest;
+use App\Models\RestCorrection;
 
 class AdminCorrectionController extends Controller
 {
@@ -34,7 +34,7 @@ class AdminCorrectionController extends Controller
             ->first();
 
         if (!$attendance) {
-            return redirect()->route('corrections.index');
+            return redirect()->route('correction.index');
         }
 
         $correctionId = $request->query('correction_id');
@@ -50,19 +50,19 @@ class AdminCorrectionController extends Controller
         }
 
         if ($correction) {
-            $correctionRests = CorrectionRest::where('correction_id', $correction->id)->get();
+            $restCorrections = RestCorrection::where('correction_id', $correction->id)->get();
         } else {
-            $correctionRests = collect();
+            $restCorrections = collect();
         }
 
-        return view('admin.correction-detail', compact('attendance', 'correction', 'correctionRests'));
+        return view('admin.correction-detail', compact('attendance', 'correction', 'restCorrections'));
     }
 
     public function approved($id) {
         $attendance = Attendance::where('id', $id)->first();
 
         if (!$attendance) {
-            return redirect()->route('corrections.index');
+            return redirect()->route('correction.index');
         }
 
         $correction = AttendanceCorrection::where('attendance_id', $attendance->id)
@@ -80,13 +80,13 @@ class AdminCorrectionController extends Controller
 
                 Rest::where('attendance_id', $attendance->id)->delete();
 
-                $correctionRests = CorrectionRest::where('correction_id', $correction->id)->get();
+                $restCorrections = RestCorrection::where('correction_id', $correction->id)->get();
 
-                foreach ($correctionRests as $correctionRest) {
+                foreach ($restCorrections as $RestCorrection) {
                     Rest::create([
                         'attendance_id' => $attendance->id,
-                        'start_time' => $correctionRest->start_time,
-                        'end_time' => $correctionRest->end_time,
+                        'start_time' => $RestCorrection->start_time,
+                        'end_time' => $RestCorrection->end_time,
                     ]);
                 }
 

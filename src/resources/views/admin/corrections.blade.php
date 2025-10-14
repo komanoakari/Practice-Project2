@@ -1,4 +1,4 @@
-@extends('layouts.header-admin')
+@extends('layouts.header')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/corrections.css') }}">
@@ -9,8 +9,8 @@
 
 <div class="contents">
     <nav class="tabs">
-        <a href="{{ route('corrections.index', ['tab' => 'pending-approval']) }}" class="tab {{ $tab === 'pending-approval' ? 'active' : '' }}">承認待ち</a>
-        <a href="{{ route('corrections.index', ['tab' => 'approved']) }}" class="tab {{ $tab === 'approved' ? 'active' : '' }}">承認済み</a>
+        <a href="{{ route('correction.index', ['tab' => 'pending-approval']) }}" class="tab {{ $tab === 'pending-approval' ? 'active' : '' }}">承認待ち</a>
+        <a href="{{ route('correction.index', ['tab' => 'approved']) }}" class="tab {{ $tab === 'approved' ? 'active' : '' }}">承認済み</a>
     </nav>
 
     @if ($tab === 'pending-approval')
