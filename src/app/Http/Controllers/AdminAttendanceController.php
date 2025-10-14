@@ -93,14 +93,6 @@ class AdminAttendanceController extends Controller
             return redirect()->route('admin.index');
         }
 
-        $breakValidation = $this->validateBreakTimes($request);
-
-        if ($breakValidation !== true) {
-            return redirect()->back()
-                ->withInput()
-                ->withErrors($breakValidation);
-        }
-
         $starts = $request->input('break_starts', []);
         $ends = $request->input('break_ends', []);
         $count = max(count($starts), count($ends));
@@ -130,42 +122,4 @@ class AdminAttendanceController extends Controller
         return redirect()->route('admin.detail', $id)
             ->with('success', '勤怠を更新しました');
     }
-
-    private function validateBreakTimes($request)
-    {
-        $startTime = $request->start_time;
-        $endTime = $request->end_time;
-        $breakStarts = $request->input('break_starts', []);
-        $breakEnds = $request->input('break_ends', []);
-        $count = max(count($breakStarts), count($breakEnds));
-
-        for ($i = 0; $i < $count; $i++) {
-            $breakStart = $breakStarts[$i] ?? null;
-            $breakEnd = $breakEnds[$i] ?? null;
-
-            if (empty($breakStart) && empty($breakEnd)) {
-                continue;
-            }
-
-            if (empty($breakStart) || empty($breakEnd)) {
-                return ['break_error' => '休憩時間が不適切な値です'];
-            }
-
-            if ($breakStart < $startTime || $breakStart > $endTime) {
-                return ['break_error' => '休憩時間が不適切な値です'];
-            }
-
-            if ($breakEnd > $endTime) {
-                return ['break_error' => '休憩時間もしくは退勤時間が不適切な値です'];
-            }
-
-            if ($breakStart >= $breakEnd) {
-                return ['break_error' => '休憩時間が不適切な値です'];
-            }
-        }
-
-        return true;
-    }
-
-
 }

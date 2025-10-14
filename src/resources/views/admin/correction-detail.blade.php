@@ -1,4 +1,4 @@
-@extends('layouts.header-admin')
+@extends('layouts.header')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/admin/correction-detail.css') }}">
@@ -40,12 +40,12 @@
                     <td></td>
                 </tr>
 
-                @foreach($correctionRests as $correctionRest)
+                @foreach($restCorrections as $restCorrection)
                 <tr class="table-row">
                     <th class="label">休憩{{ $loop->iteration }}</th>
-                    <td class="data">{{ \Carbon\Carbon::parse($correctionRest->start_time)->format('H:i') }}</td>
+                    <td class="data">{{ \Carbon\Carbon::parse($restCorrection->start_time)->format('H:i') }}</td>
                     <td class="data-separator">〜</td>
-                    <td class="data">{{ \Carbon\Carbon::parse($correctionRest->end_time)->format('H:i') }}</td>
+                    <td class="data">{{ \Carbon\Carbon::parse($restCorrection->end_time)->format('H:i') }}</td>
                     <td></td>
                 </tr>
                 @endforeach

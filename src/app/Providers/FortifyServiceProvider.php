@@ -59,7 +59,12 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(LoginResponse::class, function() {
             return new class implements LoginResponse {
                 public function toResponse($request) {
-                    return redirect('/attendance');
+                    $user = $request->user();
+
+                    if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
+                        return redirect()->route('verification.notice');
+                    }
+                    return redirect()->route('attendance.stamp');
                 }
             };
         });
@@ -105,6 +110,7 @@ class FortifyServiceProvider extends ServiceProvider
                 $user = User::where('email', $request->email)->first();
 
                 if ($user && Hash::check($request->password, $user->password)) {
+                    Auth::guard('admins')->logout();
                     return $user;
                 }
             }

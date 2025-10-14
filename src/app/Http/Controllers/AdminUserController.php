@@ -73,9 +73,9 @@ class AdminUserController extends Controller
             }
         }
 
-        $attendanceByDate = [];
-        foreach ($attendances as $att) {
-            $attendancesByDate[$att->date] = $att;
+        $attendancesByDate = [];
+        foreach ($attendances as $attendance) {
+            $attendancesByDate[$attendance->date] = $attendance;
         }
 
         $allAttendances = [];
