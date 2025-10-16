@@ -120,7 +120,14 @@ docker compose exec php bash -lc 'cd src && php artisan test'
 
 ## ログイン用テストアカウント（Seeder で作成済み）
 
+**テストユーザー**
+
 - メール：test@example.com
+- パスワード：password
+
+**管理ユーザー**
+
+- メール：admin@gmail.com
 - パスワード：password
 
 ## ER 図
