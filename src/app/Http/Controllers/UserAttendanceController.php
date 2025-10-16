@@ -72,7 +72,7 @@ class UserAttendanceController extends Controller
             }
         }
 
-        $attendanceByDate = [];
+        $attendancesByDate = [];
         foreach ($attendances as $att) {
             $attendancesByDate[$att->date] = $att;
         }

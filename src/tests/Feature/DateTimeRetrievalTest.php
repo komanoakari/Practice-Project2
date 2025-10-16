@@ -5,18 +5,31 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class DateTimeRetrievalTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_example()
-    {
-        $response = $this->get('/');
+    use RefreshDatabase;
 
-        $response->assertStatus(200);
+    public function test_format_now_returns_expected_format()
+    {
+        $user = User::forceCreate([
+            'name' => 'テストユーザー',
+            'email' => 'test3@gmail.com',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
+        ]);
+        $this->actingAs($user);
+
+        $today = now();
+
+        $date = $today->format('Y年m月d日');
+        $dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][$today->dayOfWeek];
+        $expectedDate = $date . '(' . $dayOfWeek . ')';
+
+        $response = $this->get('/attendance')
+            ->assertOk()
+            ->assertSee($expectedDate);
     }
 }
