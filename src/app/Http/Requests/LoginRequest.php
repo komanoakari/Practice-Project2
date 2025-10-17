@@ -6,7 +6,7 @@ use Laravel\Fortify\Http\Requests\LoginRequest as FortifyLoginRequest;
 
 class LoginRequest extends FortifyLoginRequest
 {
-    public function authorize():bool
+    public function authorize(): bool
     {
         return true;
     }

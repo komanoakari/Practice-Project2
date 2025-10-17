@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateRestCorrectionsTable extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::create('rest_corrections', function (Blueprint $table) {
             $table->id();
@@ -17,7 +17,7 @@ class CreateRestCorrectionsTable extends Migration
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('rest_corrections');
     }

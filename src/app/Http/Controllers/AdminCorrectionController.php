@@ -12,7 +12,7 @@ use App\Models\RestCorrection;
 
 class AdminCorrectionController extends Controller
 {
-    public function index(request $request) {
+    public function index(Request $request) {
         $tab = $request->query('tab', 'pending-approval');
 
         $pendingCorrections = AttendanceCorrection::where('status', '承認待ち')
@@ -82,7 +82,7 @@ class AdminCorrectionController extends Controller
 
                 $restCorrections = RestCorrection::where('correction_id', $correction->id)->get();
 
-                foreach ($restCorrections as $RestCorrection) {
+                foreach ($restCorrections as $restCorrection) {
                     Rest::create([
                         'attendance_id' => $attendance->id,
                         'start_time' => $RestCorrection->start_time,

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AttendanceCorrection;
 use App\Models\Attendance;
+use App\Http\Controllers\AdminCorrectionController;
 
 class UserCorrectionController extends Controller
 {
