@@ -12,16 +12,16 @@
         <form action="{{ route('login') }}" class="form-inner" method="post" novalidate>
         @csrf
             <div class="form-group">
-                <label for="email" class="form-label">メールアドレス</label>
-                <input type="email" id="email" class="form-input" name="email" value="{{ old('email') }}">
+                <label for="email" class="label">メールアドレス</label>
+                <input type="email" id="email" class="input" name="email" value="{{ old('email') }}">
                 @error('email')
                     <p class="error-message">{{ $message }}</p>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="password" class="form-label">パスワード</label>
-                <input type="password" id="password" name="password" class="form-input">
+                <label for="password" class="label">パスワード</label>
+                <input type="password" id="password" name="password" class="input">
                 @error('password')
                     <p class="error-message">{{ $message }}</p>
                 @enderror

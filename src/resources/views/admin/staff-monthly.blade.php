@@ -1,27 +1,28 @@
 @extends('layouts.header')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/staff-monthly.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin/staff-monthly.css') }}">
 @endsection
 
 @section('content')
-<h1 class="heading">{{ $user->name }}さんの勤怠</h1>
-
 <div class="contents">
+    <h1 class="heading">{{ $user->name }}さんの勤怠</h1>
     @error('detail')
     <div class="error-message">
         <p class="error-text">{{ $message }}</p>
     </div>
     @enderror
 
-    <div class="calender-container">
-        <a href="{{ route('staff.monthly', ['id' => $user->id, 'date' => $date->copy()->subMonth()->format('Y-m')]) }}" class="month-pagination">先月</a>
-        <img src="{{ asset('images/calender-icon.png') }}" alt="カレンダーアイコン" class="calender-icon">
-        <div class="this-month">{{ $date->format('Y/m') }}</div>
-        <a href="{{ route('staff.monthly', ['id' => $user->id, 'date' => $date->copy()->addMonth()->format('Y-m')]) }}" class="month-pagination">翌月</a>
+    <div class="calender">
+        <a href="{{ route('staff.monthly', ['id' => $user->id, 'date' => $date->copy()->subMonth()->format('Y-m')]) }}" class="previous-month">先月</a>
+        <div class="current-group">
+            <img src="{{ asset('images/calender-icon.png') }}" alt="カレンダーアイコン" class="calender-icon">
+            <div class="current-month">{{ $date->format('Y/m') }}</div>
+        </div>
+        <a href="{{ route('staff.monthly', ['id' => $user->id, 'date' => $date->copy()->addMonth()->format('Y-m')]) }}" class="next-month">翌月</a>
     </div>
 
-    <form action="{{ route('export.monthly', ['id' => $user->id]) }}" method="get" class="export-form">
+    <form action="{{ route('export.monthly', ['id' => $user->id]) }}" method="get" class="form">
         <table class="table">
             <tr class="table-row">
                 <th class="label">日付</th>

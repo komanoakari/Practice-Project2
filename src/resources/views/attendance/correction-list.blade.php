@@ -5,13 +5,13 @@
 @endsection
 
 @section('content')
-<h1 class="heading">申請一覧</h1>
-
 <div class="contents">
+    <h1 class="heading">申請一覧</h1>
     <nav class="tabs">
         <a href="{{ route('correction.index', ['tab' => 'pending-approval']) }}" class="tab {{ $tab === 'pending-approval' ? 'active' : '' }}">承認待ち</a>
         <a href="{{ route('correction.index', ['tab' => 'approved']) }}" class="tab {{ $tab === 'approved' ? 'active' : '' }}">承認済み</a>
     </nav>
+    <hr>
 
     @if ($tab === 'pending-approval')
         <div class="panel-listed">

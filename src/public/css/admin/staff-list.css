@@ -1,0 +1,47 @@
+.contents {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 120px;
+    width: 100%;
+}
+
+.heading {
+    font-weight: bold;
+    font-size: 30px;
+    border-left: 8px solid black;
+    padding-left: 15px;
+    text-align: left;
+    width: 70%;
+}
+
+.table {
+    width: 70%;
+    background-color: white;
+    border-radius: 10px;
+    border-collapse: collapse;
+    margin-top: 20px;
+    table-layout: fixed;
+}
+
+.table-row {
+    border-bottom: 2px solid #E1E1E1;
+}
+
+.table-row:first-child {
+    border-bottom: 3px solid #E1E1E1;
+}
+
+.label,
+.data {
+    font-size: 16px;
+    font-weight: bold;
+    color: #737373;
+    padding: 15px 0;
+    text-align: center;
+}
+
+.detail-link {
+    color: black;
+    text-decoration: none;
+}

@@ -5,20 +5,22 @@
 @endsection
 
 @section('content')
-<h1 class="heading">勤怠一覧</h1>
-
 <div class="contents">
+    <h1 class="heading">勤怠一覧</h1>
+
     @error('detail')
     <div class="error-message">
         <p class="error-text">{{ $message }}</p>
     </div>
     @enderror
 
-    <div class="calender-container">
-        <a href="{{ route('attendance.index', ['date' => $date->copy()->subMonth()->format('Y-m')]) }}" class="last-month-pagination">先月</a>
-        <img src="{{ asset('images/calender-icon.png') }}" alt="カレンダーアイコン" class="calender-icon">
-        <div class="this-month">{{ $date->format('Y/m') }}</div>
-        <a href="{{ route('attendance.index', ['date' => $date->copy()->addMonth()->format('Y-m')]) }}" class="next-month-pagination">翌月</a>
+    <div class="calender">
+        <a href="{{ route('attendance.index', ['date' => $date->copy()->subMonth()->format('Y-m')]) }}" class="previous-month">先月</a>
+        <div class="current-group">
+            <img src="{{ asset('images/calender-icon.png') }}" alt="カレンダーアイコン" class="calender-icon">
+            <div class="current-month">{{ $date->format('Y/m') }}</div>
+        </div>
+        <a href="{{ route('attendance.index', ['date' => $date->copy()->addMonth()->format('Y-m')]) }}" class="next-month">翌月</a>
     </div>
 
     <table class="table">

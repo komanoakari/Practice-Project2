@@ -13,16 +13,13 @@
     border-left: 8px solid black;
     padding-left: 15px;
     text-align: left;
-    width: 70%;
+    width: 60%;
 }
 
-.error-message {
+.success-message {
     display: block;
-    width: 70%;
+    width: 60%;
     text-align: left;
-}
-
-.error-text {
     font-size: 20px;
     color: red;
 }
@@ -33,12 +30,12 @@
     align-items: center;
     background-color: white;
     border-radius: 10px;
-    width: 70%;
+    width: 60%;
     height: 60px;
 }
 
-.previous-month,
-.next-month {
+.previous-day,
+.next-day {
     font-weight: bold;
     font-size: 16px;
     color: #737373;
@@ -46,13 +43,13 @@
     text-decoration: none;
 }
 
-.previous-month::before {
+.previous-day::before {
     content: "⬅";
     margin-right: 5px;
     font-size: 17px;
 }
 
-.next-month::after {
+.next-day::after {
     content: "➡︎";
     margin-left: 5px;
     font-size: 17px;
@@ -69,13 +66,13 @@
     height: 25px;
 }
 
-.current-month {
+.current-day {
     font-weight: bold;
     font-size: 20px;
 }
 
 .table {
-    width: 70%;
+    width: 60%;
     background-color: white;
     border-radius: 10px;
     border-collapse: collapse;
@@ -96,13 +93,12 @@
     color: #737373;
     padding: 15px 10px;
     text-align: center;
+    width: 100px;
 }
 
 .table-row td:first-child,
 .table-row th:first-child {
-    width: 200px;
-    padding-left: 50px;
-    text-align: left;
+    width: 150px;
 }
 
 
@@ -116,3 +112,15 @@
     text-decoration: none;
 }
 
+@media (max-width:850px) {
+    .heading,
+    .calender,
+    .table {
+        width: 80%;
+    }
+
+    .label,
+    .data {
+        width: 100px;
+    }
+}
