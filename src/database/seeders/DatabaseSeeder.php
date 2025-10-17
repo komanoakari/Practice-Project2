@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Attendance;
-use App\Models\Rest;
 use App\Models\AttendanceCorrection;
 use App\Models\RestCorrection;
 

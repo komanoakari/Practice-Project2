@@ -19,7 +19,7 @@ class UserFactory extends Factory
         ];
     }
 
-    public function unverified(): array
+    public function unverified()
     {
         return $this->state(function (array $attributes) {
             return [

@@ -8,9 +8,9 @@
 <div class="contents">
     <h1 class="heading">{{ $user->name }}さんの勤怠</h1>
     @error('detail')
-    <div class="error-message">
-        <p class="error-text">{{ $message }}</p>
-    </div>
+        <div class="error-message">
+            <p class="error-text">{{ $message }}</p>
+        </div>
     @enderror
 
     <div class="calender">
@@ -33,20 +33,20 @@
                 <th class="label">詳細</th>
             </tr>
             @foreach($attendances as $attendance)
-            <tr class="table-row">
-                <td class="data">{{ \Carbon\Carbon::parse($attendance->date)->format('m/d') }}({{ ['日', '月', '火', '水', '木', '金', '土'][\Carbon\Carbon::parse($attendance->date)->dayOfWeek] }})</td>
-                <td class="data">{{ $attendance->start_time ? \Carbon\Carbon::parse($attendance->start_time)->format('H:i') : ''}}</td>
-                <td class="data">{{ $attendance->end_time ? \Carbon\Carbon::parse($attendance->end_time)->format('H:i') : ''}}</td>
-                <td class="data">{{ $attendance->break_time }}</td>
-                <td class="data">{{ $attendance->total_time }}</td>
-                <td class="data">
-                    @if($attendance->id)
-                        <a href="{{ route('admin.detail', ['id' => $attendance->id]) }}" class="detail-link">詳細</a>
-                    @else
-                        <a href="{{ route('admin.detail', ['id' => 0]) }}" class="detail-link">詳細</a>
-                    @endif
-                </td>
-            </tr>
+                <tr class="table-row">
+                    <td class="data">{{ \Carbon\Carbon::parse($attendance->date)->format('m/d') }}({{ ['日', '月', '火', '水', '木', '金', '土'][\Carbon\Carbon::parse($attendance->date)->dayOfWeek] }})</td>
+                    <td class="data">{{ $attendance->start_time ? \Carbon\Carbon::parse($attendance->start_time)->format('H:i') : ''}}</td>
+                    <td class="data">{{ $attendance->end_time ? \Carbon\Carbon::parse($attendance->end_time)->format('H:i') : ''}}</td>
+                    <td class="data">{{ $attendance->break_time }}</td>
+                    <td class="data">{{ $attendance->total_time }}</td>
+                    <td class="data">
+                        @if($attendance->id)
+                            <a href="{{ route('admin.detail', ['id' => $attendance->id]) }}" class="detail-link">詳細</a>
+                        @else
+                            <a href="{{ route('admin.detail', ['id' => 0]) }}" class="detail-link">詳細</a>
+                        @endif
+                    </td>
+                </tr>
             @endforeach
         </table>
 
@@ -54,5 +54,4 @@
         <input type="hidden" name="date" value="{{ $date->format('Y-m') }}">
     </form>
 </div>
-
 @endsection

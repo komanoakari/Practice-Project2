@@ -8,7 +8,7 @@
 <div class="contents">
     <h1 class="heading">{{ $date->format('Y/m/d') }}の一覧</h1>
     @if(session('success'))
-    <p class="success-message">{{ session('success') }}</p>
+        <p class="success-message">{{ session('success') }}</p>
     @endif
 
     <div class="calender">
@@ -30,18 +30,17 @@
             <th class="label">詳細</th>
         </tr>
         @foreach($attendances as $attendance)
-        <tr class="table-row">
-            <td class="data">{{ $attendance->user->name }}</td>
-            <td class="data">{{ $attendance->start_time ? \Carbon\Carbon::parse($attendance->start_time)->format('H:i') : ''}}</td>
-            <td class="data">{{ $attendance->end_time ? \Carbon\Carbon::parse($attendance->end_time)->format('H:i') : ''}}</td>
-            <td class="data">{{ $attendance->break_time }}</td>
-            <td class="data">{{ $attendance->total_time }}</td>
-            <td class="data">
-                <a href="{{ route('admin.detail', ['id' => $attendance->id]) }}" class="detail-link">詳細</a>
-            </td>
-        </tr>
+            <tr class="table-row">
+                <td class="data">{{ $attendance->user->name }}</td>
+                <td class="data">{{ $attendance->start_time ? \Carbon\Carbon::parse($attendance->start_time)->format('H:i') : ''}}</td>
+                <td class="data">{{ $attendance->end_time ? \Carbon\Carbon::parse($attendance->end_time)->format('H:i') : ''}}</td>
+                <td class="data">{{ $attendance->break_time }}</td>
+                <td class="data">{{ $attendance->total_time }}</td>
+                <td class="data">
+                    <a href="{{ route('admin.detail', ['id' => $attendance->id]) }}" class="detail-link">詳細</a>
+                </td>
+            </tr>
         @endforeach
     </table>
 </div>
-
 @endsection

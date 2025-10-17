@@ -18,11 +18,11 @@ class UpdateAttendanceRequest extends FormRequest
             'end_time' => ['required', 'after:start_time'],
             'remarks' => ['required'],
             'break_starts' => ['nullable', 'array'],
-            'break_end' => ['nullable', 'array'],
+            'break_ends' => ['nullable', 'array'],
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'start_time.required' => '出勤時間を入力してください',
@@ -33,7 +33,7 @@ class UpdateAttendanceRequest extends FormRequest
         ];
     }
 
-    public function withValidator($validator)
+    public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
             $startTime = $this->start_time;

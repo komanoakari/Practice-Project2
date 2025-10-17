@@ -10,18 +10,18 @@
     <table class="table">
         <tr class="table-row">
             <th class="label">名前</th>
-            <td class="data">メールアドレス</td>
-            <td class="data">月次勤怠</td>
+            <th class="label">メールアドレス</th>
+            <th class="label">月次勤怠</th>
         </tr>
 
         @foreach($users as $user)
-        <tr class="table-row">
-            <td class="data">{{ $user->name }}</td>
-            <td class="data">{{ $user->email }}</td>
-            <td class="data">
-                <a href="{{ route('staff.monthly', ['id' => $user->id]) }}" class="detail-link">詳細</a>
-            </td>
-        </tr>
+            <tr class="table-row">
+                <td class="data">{{ $user->name }}</td>
+                <td class="data">{{ $user->email }}</td>
+                <td class="data">
+                    <a href="{{ route('staff.monthly', ['id' => $user->id]) }}" class="detail-link">詳細</a>
+                </td>
+            </tr>
         @endforeach
     </table>
 </div>
