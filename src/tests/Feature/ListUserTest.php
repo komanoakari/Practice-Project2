@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Carbon\Carbon;
 use App\Models\User;
@@ -75,7 +74,7 @@ class ListUserTest extends TestCase
 
         $date = $today->format('Y/m');
 
-        $response = $this->get('/attendance/list')
+        $this->get('/attendance/list')
             ->assertOk()
             ->assertSee($date);
     }
@@ -163,7 +162,7 @@ class ListUserTest extends TestCase
             'end_time' => '18:00:00',
         ]);
 
-        $listResponse = $this->get('/attendance/list')
+        $this->get('/attendance/list')
             ->assertOk()
             ->assertSee('詳細');
 

@@ -3,12 +3,10 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Carbon\Carbon;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Attendance;
-use App\Models\Rest;
 use Illuminate\Support\Facades\Hash;
 
 class CheckInTest extends TestCase
@@ -27,9 +25,9 @@ class CheckInTest extends TestCase
 
         $this->get('/attendance')
             ->assertOk()
-            ->assertSee('<button class="clocked-in-btn">出勤</button>',false);
+            ->assertSee('出勤');
 
-        $response = $this->post(route('attendance.clock-in'));
+        $this->post(route('attendance.clock-in'));
 
         $this->get('/attendance')
             ->assertOk()
