@@ -14,31 +14,66 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::factory()->count(6)->create()->each(function (User $user) {
-            $attendances = Attendance::factory()
-                ->count(20)
-                ->for($user)
-                ->has(
-                    Rest::factory()->count(1),
-                    'rests'
-                )
-                ->create();
+            for ($i = 0; $i < 30; $i++) {
+                $date = now()->subDays($i)->format('Y-m-d');
 
-            $targets = $attendances->random(1);
+                $attendance = Attendance::factory()
+                    ->for($user)
+                    ->create([
+                        'date' => $date,
+                    ]);
 
-            $targets->each(function (Attendance $attendance) {
-                AttendanceCorrection::factory()
-                    ->for($attendance, 'attendance')
-                    ->has(
-                        RestCorrection::factory()->count(1),
-                        'restCorrections'
-                    )
+                Rest::factory()
+                    ->for($attendance)
                     ->create();
-            });
+            }
+
+            $randomAttendance = $user->attendances()->inRandomOrder()->first();
+
+            if ($randomAttendance) {
+                $correction = AttendanceCorrection::factory()
+                    ->for($randomAttendance, 'attendance')
+                    ->create();
+
+                RestCorrection::factory()
+                    ->for($correction, 'correction')
+                    ->create();
+            }
         });
 
         $this->call([
             AdminsSeeder::class,
             UsersSeeder::class,
         ]);
+
+        $testUser = User::where('email', 'test@example.com')->first();
+
+        if ($testUser) {
+            for ($i = 0; $i < 30; $i++) {
+                $date = now()->subDays($i)->format('Y-m-d');
+
+                $attendance = Attendance::factory()
+                    ->for($testUser)
+                    ->create([
+                        'date' => $date,
+                    ]);
+
+                Rest::factory()
+                    ->for($attendance)
+                    ->create();
+            }
+
+            $randomAttendance = $testUser->attendances()->inRandomOrder()->first();
+
+            if ($randomAttendance) {
+                $correction = AttendanceCorrection::factory()
+                    ->for($randomAttendance, 'attendance')
+                    ->create();
+
+                RestCorrection::factory()
+                    ->for($correction, 'correction')
+                    ->create();
+            }
+        }
     }
 }

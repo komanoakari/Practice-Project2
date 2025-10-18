@@ -85,8 +85,8 @@ class AdminCorrectionController extends Controller
                 foreach ($restCorrections as $restCorrection) {
                     Rest::create([
                         'attendance_id' => $attendance->id,
-                        'start_time' => $RestCorrection->start_time,
-                        'end_time' => $RestCorrection->end_time,
+                        'start_time' => $restCorrection->start_time,
+                        'end_time' => $restCorrection->end_time,
                     ]);
                 }
 
