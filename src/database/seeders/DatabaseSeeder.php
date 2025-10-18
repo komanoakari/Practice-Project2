@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Attendance;
+use App\Models\Rest;
 use App\Models\AttendanceCorrection;
 use App\Models\RestCorrection;
 
@@ -16,6 +17,10 @@ class DatabaseSeeder extends Seeder
             $attendances = Attendance::factory()
                 ->count(20)
                 ->for($user)
+                ->has(
+                    Rest::factory()->count(1),
+                    'rests'
+                )
                 ->create();
 
             $targets = $attendances->random(1);

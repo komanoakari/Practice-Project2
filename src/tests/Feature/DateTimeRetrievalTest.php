@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -28,7 +27,7 @@ class DateTimeRetrievalTest extends TestCase
         $dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][$today->dayOfWeek];
         $expectedDate = $date . '(' . $dayOfWeek . ')';
 
-        $response = $this->get('/attendance')
+        $this->get('/attendance')
             ->assertOk()
             ->assertSee($expectedDate);
     }

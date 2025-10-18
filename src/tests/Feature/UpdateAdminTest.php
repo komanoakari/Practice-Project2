@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Carbon\Carbon;
 use App\Models\User;
@@ -89,7 +88,7 @@ class UpdateAdminTest extends TestCase
         $this->get(route('admin.detail', ['id' => $attendance->id]))
             ->assertOk();
 
-        $response = $this->from(route('admin.detail', ['id' => $attendance->id]))
+        $this->from(route('admin.detail', ['id' => $attendance->id]))
             ->post(route('admin.update', ['id' => $attendance->id]), [
                 'start_time' => '20:00:00',
                 'end_time' => '18:00:00',
@@ -131,7 +130,7 @@ class UpdateAdminTest extends TestCase
         $this->get(route('admin.detail', ['id' => $attendance->id]))
             ->assertOk();
 
-        $response = $this->from(route('admin.detail', ['id' => $attendance->id]))
+        $this->from(route('admin.detail', ['id' => $attendance->id]))
             ->post(route('admin.update', ['id' => $attendance->id]), [
                 'start_time' => '09:00:00',
                 'end_time' => '18:00:00',
@@ -175,7 +174,7 @@ class UpdateAdminTest extends TestCase
         $this->get(route('admin.detail', ['id' => $attendance->id]))
             ->assertOk();
 
-        $response = $this->from(route('admin.detail', ['id' => $attendance->id]))
+        $this->from(route('admin.detail', ['id' => $attendance->id]))
             ->post(route('admin.update', ['id' => $attendance->id]), [
                 'start_time' => '09:00:00',
                 'end_time' => '18:00:00',
@@ -214,7 +213,7 @@ class UpdateAdminTest extends TestCase
         $this->get(route('admin.detail', ['id' => $attendance->id]))
             ->assertOk();
 
-        $response = $this->from(route('admin.detail', ['id' => $attendance->id]))
+        $this->from(route('admin.detail', ['id' => $attendance->id]))
             ->post(route('admin.update', ['id' => $attendance->id]), [
                 'start_time' => '09:00:00',
                 'end_time' => '18:00:00',

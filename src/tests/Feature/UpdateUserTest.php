@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Carbon\Carbon;
 use App\Models\User;
@@ -37,7 +36,7 @@ class UpdateUserTest extends TestCase
         $this->get(route('attendance.detail', ['id' => $attendance->id]))
             ->assertOk();
 
-        $response = $this->from(route('attendance.detail', ['id' => $attendance->id]))
+        $this->from(route('attendance.detail', ['id' => $attendance->id]))
             ->post(route('attendance.update', ['id' => $attendance->id]), [
                 'start_time' => '20:00:00',
                 'end_time' => '18:00:00',
@@ -73,7 +72,7 @@ class UpdateUserTest extends TestCase
         $this->get(route('attendance.detail', ['id' => $attendance->id]))
             ->assertOk();
 
-        $response = $this->from(route('attendance.detail', ['id' => $attendance->id]))
+        $this->from(route('attendance.detail', ['id' => $attendance->id]))
             ->post(route('attendance.update', ['id' => $attendance->id]), [
                 'start_time' => '09:00:00',
                 'end_time' => '18:00:00',
@@ -111,7 +110,7 @@ class UpdateUserTest extends TestCase
         $this->get(route('attendance.detail', ['id' => $attendance->id]))
             ->assertOk();
 
-        $response = $this->from(route('attendance.detail', ['id' => $attendance->id]))
+        $this->from(route('attendance.detail', ['id' => $attendance->id]))
             ->post(route('attendance.update', ['id' => $attendance->id]), [
                 'start_time' => '09:00:00',
                 'end_time' => '18:00:00',
@@ -143,7 +142,7 @@ class UpdateUserTest extends TestCase
         $this->get(route('attendance.detail', ['id' => $attendance->id]))
             ->assertOk();
 
-        $response = $this->from(route('attendance.detail', ['id' => $attendance->id]))
+        $this->from(route('attendance.detail', ['id' => $attendance->id]))
             ->post(route('attendance.update', ['id' => $attendance->id]), [
                 'start_time' => '09:00:00',
                 'end_time' => '18:00:00',
@@ -173,7 +172,7 @@ class UpdateUserTest extends TestCase
         $this->get(route('attendance.detail', ['id' => $attendance->id]))
             ->assertOk();
 
-        $response = $this->from(route('attendance.detail', ['id' => $attendance->id]))
+        $this->from(route('attendance.detail', ['id' => $attendance->id]))
             ->post(route('attendance.update', ['id' => $attendance->id]), [
                 'start_time' => '09:00:00',
                 'end_time' => '17:00:00',

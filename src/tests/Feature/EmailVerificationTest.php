@@ -43,12 +43,23 @@ class EmailVerificationTest extends TestCase
             'email_verified_at' => null,
         ]);
 
-        $this->ActingAs($user);
+        $this->actingAs($user);
 
         $this->get(route('verification.notice'))
             ->assertOk()
-            ->assertSee('認証はこちらから')
-            ->assertSee('<a href="http://localhost:8025" class="btn">認証はこちらから</a>', false);
+            ->assertSee('認証はこちらから');
+
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            [
+                'id' => $user->id,
+                'hash' => sha1($user->email),
+            ]
+        );
+
+        $this->get($verificationUrl)
+            ->assertRedirect('/attendance');
     }
 
     public function test_verified_redirects_to_attendance_stamp()
