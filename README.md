@@ -1,4 +1,3 @@
-````markdown
 # coachtech\_勤怠管理アプリ
 
 従業員の勤怠打刻から管理者による承認まで、ユーザーの勤怠管理を目的としたアプリです。
@@ -158,4 +157,3 @@ docker compose exec php bash -lc 'cd src && php artisan test'
 ## ER 図
 
 ![ER図](er.png)
-````
