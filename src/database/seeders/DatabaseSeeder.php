@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::factory()->count(6)->create()->each(function (User $user) {
-            for ($i = 0; $i < 30; $i++) {
+            for ($i = 1; $i <= 30; $i++) {
                 $date = now()->subDays($i)->format('Y-m-d');
 
                 $attendance = Attendance::factory()
@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
         $testUser = User::where('email', 'test@example.com')->first();
 
         if ($testUser) {
-            for ($i = 0; $i < 30; $i++) {
+            for ($i = 1; $i <= 30; $i++) {
                 $date = now()->subDays($i)->format('Y-m-d');
 
                 $attendance = Attendance::factory()
