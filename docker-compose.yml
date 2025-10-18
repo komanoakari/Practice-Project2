@@ -42,5 +42,5 @@ services:
     mailhog:
         image: mailhog/mailhog:v1.0.0
         ports:
-            - "8026:8026"
-            - "1026:1026"
+            - "8025:8025"
+            - "1025:1025"

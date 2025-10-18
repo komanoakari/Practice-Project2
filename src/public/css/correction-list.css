@@ -1,0 +1,95 @@
+.contents {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 80px;
+    width: 100%;
+}
+
+.heading {
+    font-weight: bold;
+    font-size: 30px;
+    border-left: 8px solid black;
+    padding-left: 15px;
+    text-align: left;
+    width: 60%;
+    margin-bottom: 60px;
+}
+
+.tabs {
+    display: flex;
+    gap: 80px;
+    width: 60%;
+    text-align: left;
+    padding-left: 50px;
+}
+
+.tab {
+    font-size: 16px;
+    text-decoration: none;
+    color: black;
+}
+
+.tab.active {
+    font-weight: bold;
+}
+
+hr {
+    width: 60%;
+    border-top: 1px solid black;
+    margin-top: 15px;
+}
+
+.panel-listed {
+    width: 60%;
+    margin-top: 30px;
+}
+
+.table {
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    border-collapse: collapse;
+}
+
+.table-row {
+    border-bottom: 2px solid #E1E1E1;
+}
+
+.table-row:first-child {
+    border-bottom: 3px solid #E1E1E1;
+}
+
+.label,
+.data {
+    font-size: 16px;
+    font-weight: bold;
+    color: #737373;
+    padding: 15px 10px;
+    text-align: left;
+    width: 150px;
+}
+
+.table-row td:first-child,
+.table-row th:first-child {
+    text-align: center;
+}
+
+.detail-link {
+    color: black;
+    text-decoration: none;
+}
+
+@media (max-width: 850px) {
+    .heading,
+    .tabs,
+    hr,
+    .panel-listed {
+        width: 90%;
+    }
+
+    .label,
+    .data {
+        width: 100px;
+    }
+}

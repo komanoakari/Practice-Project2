@@ -1,0 +1,126 @@
+.contents {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 90px;
+    width: 100%;
+    gap: 50px;
+}
+
+.heading {
+    font-weight: bold;
+    font-size: 30px;
+    border-left: 8px solid black;
+    padding-left: 15px;
+    text-align: left;
+    width: 60%;
+}
+
+.success-message {
+    display: block;
+    width: 60%;
+    text-align: left;
+    font-size: 20px;
+    color: red;
+}
+
+.calender {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+    width: 60%;
+    height: 60px;
+}
+
+.previous-day,
+.next-day {
+    font-weight: bold;
+    font-size: 16px;
+    color: #737373;
+    padding: 20px;
+    text-decoration: none;
+}
+
+.previous-day::before {
+    content: "⬅";
+    margin-right: 5px;
+    font-size: 17px;
+}
+
+.next-day::after {
+    content: "➡︎";
+    margin-left: 5px;
+    font-size: 17px;
+}
+
+.current-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.calender-icon {
+    width: 25px;
+    height: 25px;
+}
+
+.current-day {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.table {
+    width: 60%;
+    background-color: white;
+    border-radius: 10px;
+    border-collapse: collapse;
+}
+
+.table-row {
+    border-bottom: 2px solid #E1E1E1;
+}
+
+.table-row:first-child {
+    border-bottom: 3px solid #E1E1E1;
+}
+
+.label,
+.data {
+    font-size: 16px;
+    font-weight: bold;
+    color: #737373;
+    padding: 15px 10px;
+    text-align: center;
+    width: 100px;
+}
+
+.table-row td:first-child,
+.table-row th:first-child {
+    width: 150px;
+}
+
+
+.table-row td:last-child,
+.table-row th:last-child {
+    padding-right: 30px;
+}
+
+.detail-link {
+    color: black;
+    text-decoration: none;
+}
+
+@media (max-width:850px) {
+    .heading,
+    .calender,
+    .table {
+        width: 80%;
+    }
+
+    .label,
+    .data {
+        width: 100px;
+    }
+}

@@ -1,0 +1,36 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #F0EFF2;
+    width: 100%;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    min-height: 80px;
+    width: 100%;
+    background-color: black;
+}
+
+.header img {
+    height: 36px;
+    padding-left: 25px;
+}
+
+main {
+    background: #F5F5F5;
+    height: 100vh;
+}
