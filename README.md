@@ -10,8 +10,8 @@
 1. リポジトリをクローン
 
 ```bash
-   git clone git@github.com:komanoakari/Practice-Project2.git
-   cd Practice-Project2
+git clone git@github.com:komanoakari/Practice-Project2.git
+cd Practice-Project2
 ```
 
 2. DockerDesktop アプリを立ち上げる
@@ -19,8 +19,8 @@
 3. Docker コンテナをビルド・起動
 
 ```bash
-   docker compose up -d --build`
-```git
+docker compose up -d --build`
+```
 
 ### Laravel 環境構築
 
@@ -29,54 +29,54 @@
 1. PHP コンテナに入る
 
 ```bash
-   docker compose exec php bash
-   cd src
+docker compose exec php bash
+cd src
 ```
 
 2. Fortify をインストール
 
 ```bash
-   composer install
+composer install
 ```
 
 3. 「.env.example」を「.env」にコピー
 
 ```bash
-   cp .env.example .env
+cp .env.example .env
 ```
 
 4. .env に以下の環境変数を追加
 
 ```text
-   APP_URL=http://localhost:8018
+APP_URL=http://localhost:8018
 
-   DB_CONNECTION=mysql
-   DB_HOST=mysql
-   DB_PORT=3306
-   DB_DATABASE=laravel_db
-   DB_USERNAME=laravel_user
-   DB_PASSWORD=laravel_pass
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel_db
+DB_USERNAME=laravel_user
+DB_PASSWORD=laravel_pass
 
-   # MailHog
-   MAIL_MAILER=smtp
-   MAIL_HOST=mailhog
-   MAIL_PORT=1025
-   MAIL_ENCRYPTION=null
-   MAIL_FROM_ADDRESS=noreply@example.test
-   MAIL_FROM_NAME="${APP_NAME}"
+# MailHog
+MAIL_MAILER=smtp
+MAIL_HOST=mailhog
+MAIL_PORT=1025
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS=noreply@example.test
+MAIL_FROM_NAME="${APP_NAME}"
 ```
 
 5. アプリケーションキーの作成
 
 ```bash
-   php artisan key:generate
-   php artisan config:clear
+php artisan key:generate
+php artisan config:clear
 ```
 
 6. マイグレーション & 初期データ投入
 
 ```bash
-   php artisan migrate --seed
+php artisan migrate --seed
 ```
 
 ## 使用技術(実行環境)
@@ -127,9 +127,9 @@ docker compose exec mysql mysql -uroot -proot
 -- 以下、MySQL プロンプト内で実行
 
 ```sql
-CREATE DATABASE IF NOT EXISTS laravel_db_testing
+CREATE DATABASE IF NOT EXISTS laravel_test_db
 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-GRANT ALL PRIVILEGES ON `laravel_db_testing`.* TO 'laravel_user'@'%';
+GRANT ALL PRIVILEGES ON `laravel_test_db`.* TO 'laravel_user'@'%';
 FLUSH PRIVILEGES;
 EXIT;
 ```
