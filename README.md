@@ -19,7 +19,7 @@ cd Practice-Project2
 3. Docker コンテナをビルド・起動
 
 ```bash
-docker compose up -d --build`
+docker compose up -d --build
 ```
 
 ### Laravel 環境構築
