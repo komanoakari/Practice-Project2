@@ -67,7 +67,7 @@
                         </td>
                         <td class="data-separator">〜</td>
                         <td class="data">
-                            <input type="time" name="end_time" value="{{ \Carbon\Carbon::parse($attendance->end_time)->format('H:i') }}">
+                            <input type="time" name="end_time" value="{{ $attendance->end_time ? \Carbon\Carbon::parse($attendance->end_time)->format('H:i') : '' }}">
                         </td>
                         <td></td>
                     @endif
@@ -131,7 +131,7 @@
                                 </td>
                                 <td class="data-separator">〜</td>
                                 <td class="data">
-                                    <input type="time" name="break_ends[]" value="{{ \Carbon\Carbon::parse($rest->end_time)->format('H:i') }}">
+                                    <input type="time" name="break_ends[]" value="{{ $rest->end_time ? \Carbon\Carbon::parse($rest->end_time)->format('H:i') : '' }}">
                                 </td>
                                 <td></td>
                             </tr>
