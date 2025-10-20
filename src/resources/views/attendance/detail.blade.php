@@ -50,18 +50,7 @@
 
                 <tr class="table-row">
                     <th class="label">出勤・退勤</th>
-                    @if($correction && $correction->status === '承認待ち')
-                        <td class="data">
-                            {{ \Carbon\Carbon::parse($correction->start_time)->format('H:i') }}
-                            <input type="hidden" name="start_time" value="{{ $correction->start_time }}">
-                        </td>
-                        <td class="data-separator">〜</td>
-                        <td class="data">
-                            {{ \Carbon\Carbon::parse($correction->end_time)->format('H:i') }}
-                            <input type="hidden" name="end_time" value="{{ $correction->end_time }}">
-                        </td>
-                        <td></td>
-                    @elseif($correction && $correction->status === '承認済み' && $from === 'correction')
+                    @if(($correction && $correction->status === '承認待ち') || ($correction && $correction->status === '承認済み' && $from === 'correction'))
                         <td class="data">
                             {{ \Carbon\Carbon::parse($attendance->start_time)->format('H:i') }}
                             <input type="hidden" name="start_time" value="{{ $attendance->start_time }}">
@@ -84,20 +73,41 @@
                     @endif
                 </tr>
 
-                @if($rests->isEmpty())
-                    <tr class="table-row">
-                        <th class="label">休憩</th>
-                        @if($correction && $correction->status === '承認待ち')
+                @if(($correction && $correction->status === '承認待ち') || ($correction && $correction->status === '承認済み' && $from === 'correction'))
+                    @if($rests->isEmpty())
+                        <tr class="table-row">
+                            <th class="label">休憩</th>
                             <td class="data"> - </td>
                             <td class="data-separator">〜</td>
                             <td class="data"> - </td>
                             <td></td>
-                        @elseif($correction && $correction->status === '承認済み' && $from === 'correction')
-                            <td class="data"> - </td>
-                            <td class="data-separator">〜</td>
-                            <td class="data"> - </td>
-                            <td></td>
-                        @else
+                    @else
+                        @foreach($rests as $rest)
+                            <tr class="table-row">
+                                <th class="label">
+                                    @if($loop->first)
+                                        休憩
+                                    @else
+                                        休憩{{ $loop->iteration }}
+                                    @endif
+                                </th>
+                                <td class="data">
+                                    {{ \Carbon\Carbon::parse($rest->start_time)->format('H:i') }}
+                                    <input type="hidden" name="break_starts[]" value="{{ $rest->start_time }}">
+                                </td>
+                                <td class="data-separator">〜</td>
+                                <td class="data">
+                                    {{ \Carbon\Carbon::parse($rest->end_time)->format('H:i') }}
+                                    <input type="hidden" name="break_ends[]" value="{{ $rest->end_time }}">
+                                </td>
+                                <td></td>
+                            </tr>
+                        @endforeach
+                    @endif
+                @else
+                    @if($rests->isEmpty())
+                        <tr class="table-row">
+                            <th class="label">休憩</th>
                             <td class="data">
                                 <input type="time" name="break_starts[]">
                             </td>
@@ -106,41 +116,16 @@
                                 <input type="time" name="break_ends[]">
                             </td>
                             <td></td>
-                        @endif
-                    </tr>
-                @else
-                    @foreach($rests as $rest)
-                        <tr class="table-row">
-                            <th class="label">
-                                @if($loop->first)
-                                    休憩
-                                @else
-                                    休憩{{ $loop->iteration }}
-                                @endif
-                            </th>
-                            @if($correction && $correction->status === '承認待ち')
-                                <td class="data">
-                                    {{ \Carbon\Carbon::parse($rest->start_time)->format('H:i') }}
-                                    <input type="hidden" name="break_starts[]" value="{{ $rest->start_time }}">
-                                </td>
-                                <td class="data-separator">〜</td>
-                                <td class="data">
-                                    {{ \Carbon\Carbon::parse($rest->end_time)->format('H:i') }}
-                                    <input type="hidden" name="break_ends[]" value="{{ $rest->end_time }}">
-                                </td>
-                                <td></td>
-                            @elseif($correction && $correction->status === '承認済み' && $from === 'correction')
-                                <td class="data">
-                                    {{ \Carbon\Carbon::parse($rest->start_time)->format('H:i') }}
-                                    <input type="hidden" name="break_starts[]" value="{{ $rest->start_time }}">
-                                </td>
-                                <td class="data-separator">〜</td>
-                                <td class="data">
-                                    {{ \Carbon\Carbon::parse($rest->end_time)->format('H:i') }}
-                                    <input type="hidden" name="break_ends[]" value="{{ $rest->end_time }}">
-                                </td>
-                                <td></td>
-                            @else
+                    @else
+                        @foreach($rests as $rest)
+                            <tr class="table-row">
+                                <th class="label">
+                                    @if($loop->first)
+                                        休憩
+                                    @else
+                                        休憩{{ $loop->iteration }}
+                                    @endif
+                                </th>
                                 <td class="data">
                                     <input type="time" name="break_starts[]" value="{{ \Carbon\Carbon::parse($rest->start_time)->format('H:i') }}">
                                 </td>
@@ -149,34 +134,26 @@
                                     <input type="time" name="break_ends[]" value="{{ \Carbon\Carbon::parse($rest->end_time)->format('H:i') }}">
                                 </td>
                                 <td></td>
-                            @endif
-                        </tr>
-                    @endforeach
-                @endif
+                            </tr>
+                        @endforeach
 
-                @if($rests->isNotEmpty() && (!$correction || ($correction->status !== '承認待ち' && !($correction->status === '承認済み' && $from === 'correction'))))
-                    <tr class="table-row">
-                        <th class="label">休憩{{ $rests->count() + 1 }}</th>
-                        <td class="data">
-                            <input type="time" name="break_starts[]">
-                        </td>
-                        <td class="data-separator">〜</td>
-                        <td class="data">
-                            <input type="time" name="break_ends[]">
-                        </td>
-                        <td></td>
-                    </tr>
+                        <tr class="table-row">
+                            <th class="label">休憩{{ $rests->count() + 1 }}</th>
+                            <td class="data">exit
+                                <input type="time" name="break_starts[]">
+                            </td>
+                            <td class="data-separator">〜</td>
+                            <td class="data">
+                                <input type="time" name="break_ends[]">
+                            </td>
+                            <td></td>
+                        </tr>
+                    @endif
                 @endif
 
                 <tr class="table-row remarks-row">
                     <th class="label">備考</th>
-                    @if($correction && $correction->status === '承認待ち')
-                        <td class="remarks-data" colspan="3">
-                            {{ $correction->remarks }}
-                            <input type="hidden" name="remarks" value="{{ $correction->remarks }}">
-                        </td>
-                        <td></td>
-                    @elseif($correction && $correction->status === '承認済み' && $from === 'correction')
+                    @if(($correction && $correction->status === '承認待ち') || ($correction && $correction->status === '承認済み' && $from === 'correction'))
                         <td class="remarks-data" colspan="3">
                             {{ $attendance->remarks }}
                             <input type="hidden" name="remarks" value="{{ $attendance->remarks }}">
