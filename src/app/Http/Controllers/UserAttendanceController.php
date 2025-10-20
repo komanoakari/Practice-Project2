@@ -130,20 +130,21 @@ class UserAttendanceController extends Controller
                 ->first();
         }
 
-        if ($correction && ($correction->status === '承認待ち' || ($correction->status === '承認済み' && $from === 'correction'))) {
+        if ($correction && $correction->status === '承認待ち') {
             $rests = RestCorrection::where('correction_id', $correction->id)->get();
-        }
 
-        if ($from === 'correction' && $correction && $correction->status === '承認済み') {
-            $restCorrections = RestCorrection::where('correction_id', $correction->id)->get();
+            $attendance->start_time = $correction->start_time;
+            $attendance->end_time = $correction->end_time;
+            $attendance->remarks = $correction->remarks;
 
-            $displayAttendance = clone $attendance;
-            $displayAttendance->start_time = $correction->start_time;
-            $displayAttendance->end_time = $correction->end_time;
-            $displayAttendance->remarks = $correction->remarks;
+        } elseif ($correction && $correction->status === '承認済み' && $from === 'correction') {
+            $rests = RestCorrection::where('correction_id', $correction->id)->get();
 
-            return view('attendance.detail', compact('displayAttendance', 'rests', 'from', 'correction'))
-                ->with('attendance', $displayAttendance);
+            $attendance->start_time = $correction->start_time;
+            $attendance->end_time = $correction->end_time;
+            $attendance->remarks = $correction->remarks;
+        } else {
+            $rests = Rest::where('attendance_id', $attendance->id)->get();
         }
 
         return view('attendance.detail', compact('attendance', 'rests', 'correction', 'from'));

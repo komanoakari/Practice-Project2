@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Attendance;
 use App\Models\AttendanceCorrection;
 use App\Models\Rest;
+use App\Models\RestCorrection;
 
 use App\Http\Requests\UpdateAttendanceRequest;
 
@@ -82,7 +83,19 @@ class AdminAttendanceController extends Controller
             ->latest('applied_at')
             ->first();
 
-        return view('admin.detail', compact('attendance', 'rests', 'correction'));
+        $restCorrections = collect();
+        if ($correction) {
+            $restCorrections = RestCorrection::where('correction_id', $correction->id)
+                ->get();
+
+            if ($correction->status === '承認待ち') {
+                $attendance->start_time = $correction->start_time;
+                $attendance->end_time = $correction->end_time;
+                $attendance->remarks = $correction->remarks;
+            }
+        }
+
+        return view('admin.detail', compact('attendance', 'rests', 'correction', 'restCorrections'));
     }
 
     public function update(UpdateAttendanceRequest $request, $id) {
