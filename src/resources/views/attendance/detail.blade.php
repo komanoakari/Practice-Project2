@@ -139,7 +139,7 @@
 
                         <tr class="table-row">
                             <th class="label">休憩{{ $rests->count() + 1 }}</th>
-                            <td class="data">exit
+                            <td class="data">
                                 <input type="time" name="break_starts[]">
                             </td>
                             <td class="data-separator">〜</td>
